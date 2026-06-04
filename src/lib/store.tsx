@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useReducer, Dispatch } from "react";
+import React, { createContext, useContext, useReducer, Dispatch } from "react";
 import type { Role, Screen } from "@/types";
 
 interface AppState {
@@ -51,8 +51,6 @@ const initialState: AppState = {
   xp: 620,
   badges: ["Applicant", "Community Joined", "Profile Started"],
 };
-
-import React from "react";
 
 const StateCtx = createContext<AppState>(initialState);
 const DispatchCtx = createContext<Dispatch<Action>>(() => {});
