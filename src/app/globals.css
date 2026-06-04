@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0a0d18;
+  --bg2: #12172a;
+  --card: #171d34;
+  --card2: #202844;
+  --stroke: rgba(255, 255, 255, 0.09);
+  --text: #f5f7ff;
+  --muted: #a9b1cb;
+  --soft: #737d9d;
+  --yellow: #ffd400;
+  --yellow2: #ffb800;
+  --cyan: #44d7ff;
+  --pink: #ff4fd8;
+  --green: #4dff9d;
+  --red: #ff5c7a;
+  --telegram: #2aabee;
+  --radius: 22px;
+  --shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: radial-gradient(
+      circle at 15% -10%,
+      rgba(255, 212, 0, 0.24),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 90% 0%,
+      rgba(68, 215, 255, 0.22),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 20% 100%,
+      rgba(255, 79, 216, 0.14),
+      transparent 30%
+    ),
+    var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18); }
+}
+
+.spark {
+  display: inline-block;
+  animation: pulse 1.6s infinite;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--stroke); border-radius: 9999px; }
