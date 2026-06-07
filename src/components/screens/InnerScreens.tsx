@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNav, useDispatch } from "@/lib/store";
+import { useDBUser } from "@/components/UserProvider";
+import { upsertStartup, addUserXP, addUserBadge, requestMeeting, submitVote, fetchChallenges } from "@/lib/db";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -283,17 +285,39 @@ export function StartupDetail() {
 
 /* ─── Meeting Page ─── */
 export function MeetingPage() {
+  const dbUser = useDBUser();
+  const [objective, setObjective] = useState("Explorar piloto");
+  const [message, setMessage] = useState("Nos interesa conocer vuestra solución para un cliente retail con necesidades de atención y venta asistida.");
+  const [sent, setSent] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (dbUser?.id) {
+      await requestMeeting({ requester_id: dbUser.id, objective, message });
+    }
+    setSent(true);
+  }
+
   return (
     <div>
       <BackBar title="Solicitar reunión" subtitle="Conecta startup, agencia y marca." />
       <Card>
-        <Field label="Objetivo de la reunión">
-          <select className={inputCls}><option>Explorar piloto</option><option>Demo producto</option><option>Presentar a cliente</option></select>
-        </Field>
-        <Field label="Mensaje">
-          <textarea className={`${inputCls} min-h-[82px] resize-y`} defaultValue="Nos interesa conocer vuestra solución para un cliente retail con necesidades de atención y venta asistida." />
-        </Field>
-        <Button full>Solicitar reunión</Button>
+        <form onSubmit={handleSubmit}>
+          <Field label="Objetivo de la reunión">
+            <select className={inputCls} value={objective} onChange={e => setObjective(e.target.value)}>
+              <option>Explorar piloto</option>
+              <option>Demo producto</option>
+              <option>Presentar a cliente</option>
+            </select>
+          </Field>
+          <Field label="Mensaje">
+            <textarea className={`${inputCls} min-h-[82px] resize-y`} value={message} onChange={e => setMessage(e.target.value)} />
+          </Field>
+          <button type="submit" disabled={sent} className="w-full mt-3 rounded-[16px] py-3 font-black text-[14px] border-0 cursor-pointer transition-all"
+            style={{ background: sent ? "rgba(77,255,157,.2)" : "#FFD400", color: sent ? "#4DFF9D" : "#10131F", boxShadow: sent ? "none" : "0 10px 25px rgba(255,212,0,.22)" }}>
+            {sent ? "✓ Reunión solicitada" : "Solicitar reunión"}
+          </button>
+        </form>
       </Card>
     </div>
   );
@@ -424,6 +448,7 @@ export function InvitePage() {
 export function ProfilePage() {
   const { go } = useNav();
   const dispatch = useDispatch();
+  const dbUser = useDBUser();
 
   const [name, setName] = useState("");
   const [vertical, setVertical] = useState("Content AI");
@@ -431,9 +456,22 @@ export function ProfilePage() {
   const [client, setClient] = useState("");
   const [saved, setSaved] = useState(false);
 
-  function handleSave(e: React.FormEvent) {
+  async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     if (!name.trim() || !pitch.trim()) return;
+
+    // Persist to Supabase
+    if (dbUser?.id) {
+      await upsertStartup(dbUser.id, {
+        name: name.trim(),
+        vertical,
+        one_liner: pitch.trim(),
+        ideal_client: client.trim(),
+      });
+      await addUserXP(dbUser.id, 220);
+      await addUserBadge(dbUser.id, "Perfil Iniciado");
+    }
+
     dispatch({ type: "ADD_XP", amount: 220 });
     dispatch({ type: "ADD_BADGE", badge: "Perfil Iniciado" });
     setSaved(true);
@@ -653,28 +691,47 @@ export function AgencyDashboard() {
 
 /* ─── Awards Vote ─── */
 export function AwardsVote() {
+  const dbUser = useDBUser();
+  const [category, setCategory] = useState("Best Content AI Pilot");
+  const [finalist, setFinalist] = useState("UGC Forge");
+  const [reason, setReason] = useState("");
+  const [sent, setSent] = useState(false);
+
+  async function handleVote(e: React.FormEvent) {
+    e.preventDefault();
+    if (dbUser?.id) {
+      await submitVote({ voter_id: dbUser.id, category, reason });
+    }
+    setSent(true);
+  }
+
   return (
     <div>
       <BackBar title="Votar Awards" subtitle="Un voto por categoría" />
       <Card>
-        <Field label="Categoría">
-          <select className={inputCls}>
-            <option>Best Content AI Pilot</option>
-            <option>Best Customer Experience AI</option>
-            <option>Best Data & Insights Solution</option>
-            <option>Best Loyalty & Gamification AI</option>
-            <option>Ecosystem Activation Award</option>
-          </select>
-        </Field>
-        <Field label="Finalista">
-          <select className={inputCls}>
-            <option>UGC Forge</option><option>CXFlow AI</option><option>RetailBot Lab</option><option>AdCopy OS</option>
-          </select>
-        </Field>
-        <Field label="Motivo del voto">
-          <textarea className={`${inputCls} min-h-[82px] resize-y`} placeholder="¿Por qué debería ganar?" />
-        </Field>
-        <Button full>Enviar voto</Button>
+        <form onSubmit={handleVote}>
+          <Field label="Categoría">
+            <select className={inputCls} value={category} onChange={e => setCategory(e.target.value)}>
+              <option>Best Content AI Pilot</option>
+              <option>Best Customer Experience AI</option>
+              <option>Best Data & Insights Solution</option>
+              <option>Best Loyalty & Gamification AI</option>
+              <option>Ecosystem Activation Award</option>
+            </select>
+          </Field>
+          <Field label="Finalista">
+            <select className={inputCls} value={finalist} onChange={e => setFinalist(e.target.value)}>
+              <option>UGC Forge</option><option>CXFlow AI</option><option>RetailBot Lab</option><option>AdCopy OS</option>
+            </select>
+          </Field>
+          <Field label="Motivo del voto">
+            <textarea className={`${inputCls} min-h-[82px] resize-y`} placeholder="¿Por qué debería ganar?" value={reason} onChange={e => setReason(e.target.value)} />
+          </Field>
+          <button type="submit" disabled={sent} className="w-full mt-3 rounded-[16px] py-3 font-black text-[14px] border-0 cursor-pointer transition-all"
+            style={{ background: sent ? "rgba(77,255,157,.2)" : "#FFD400", color: sent ? "#4DFF9D" : "#10131F", boxShadow: sent ? "none" : "0 10px 25px rgba(255,212,0,.22)" }}>
+            {sent ? "✓ Voto registrado" : "Enviar voto"}
+          </button>
+        </form>
       </Card>
       <p className="text-center text-[var(--soft)] text-[11px] my-[18px]">Los votos públicos suman al ranking; el jurado valida elegibilidad y selecciona ganadores.</p>
     </div>

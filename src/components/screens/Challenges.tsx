@@ -1,130 +1,126 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useNav } from "@/lib/store";
 import { Card } from "@/components/ui/Card";
+import { fetchChallenges } from "@/lib/db";
 
-const challenges = [
-  {
-    type: "sponsor" as const,
-    typeLabel: "Ecosystem Challenge",
-    title: "Ranking de activación",
-    desc: "Un reto para medir qué comunidad genera más oportunidades antes del evento.",
-    screen: "ecosystem-challenge" as const,
-    actions: ["Reglas", "Sumar XP"],
-  },
-  {
-    type: "agency" as const,
-    typeLabel: "Founder Challenge",
-    title: "Trae un caso real al evento",
-    desc: "Reto personal de Yellow para convertir asistencia en oportunidades de innovación.",
-    screen: "founder-challenge" as const,
-    actions: ["Mensaje", "Aceptar"],
-  },
-  {
-    type: "sponsor" as const,
-    typeLabel: "Sponsor Challenge",
-    title: "IA para personalizar campañas a escala",
-    desc: "Buscamos startups capaces de generar, adaptar y medir contenido para distintos segmentos.",
-    screen: "challenge-detail" as const,
-    actions: ["Guardar", "Responder"],
-  },
-  {
-    type: "brand" as const,
-    typeLabel: "Brand Challenge",
-    title: "Reducir fricción en atención al cliente",
-    desc: "Soluciones de AI agents, automatización conversacional y analítica de satisfacción para retail.",
-    screen: "challenge-retail" as const,
-    actions: ["Ver brief", "Aplicar"],
-  },
-  {
-    type: "agency" as const,
-    typeLabel: "Agency Brief",
-    title: "Creator Economy + IA para lanzamientos",
-    desc: "Una agencia busca startups para activar comunidades, influencers y UGC con IA.",
-    screen: "challenge-agency" as const,
-    actions: ["Compartir", "Proponer"],
-  },
-];
+type Challenge = {
+  id: string;
+  type: "brand" | "agency" | "sponsor" | "ecosystem";
+  title: string;
+  description: string;
+  vertical: string | null;
+  xp_reward: number;
+  challenge_responses?: { id: string }[];
+};
 
 const pillColors: Record<string, { bg: string; text: string }> = {
-  brand: { bg: "rgba(68,215,255,.14)", text: "#44D7FF" },
-  agency: { bg: "rgba(255,79,216,.14)", text: "#FF4FD8" },
-  sponsor: { bg: "rgba(255,212,0,.16)", text: "#FFD400" },
+  brand:     { bg: "rgba(68,215,255,.14)",  text: "#44D7FF" },
+  agency:    { bg: "rgba(255,79,216,.14)",  text: "#FF4FD8" },
+  sponsor:   { bg: "rgba(255,212,0,.16)",   text: "#FFD400" },
+  ecosystem: { bg: "rgba(77,255,157,.14)",  text: "#4DFF9D" },
+};
+
+const typeLabels: Record<string, string> = {
+  brand:     "Brand Challenge",
+  agency:    "Agency Brief",
+  sponsor:   "Sponsor Challenge",
+  ecosystem: "Ecosystem Challenge",
+};
+
+const actionLabels: Record<string, [string, string]> = {
+  brand:     ["Ver brief",  "Aplicar"],
+  agency:    ["Compartir",  "Proponer"],
+  sponsor:   ["Guardar",    "Responder"],
+  ecosystem: ["Ver reglas", "Participar"],
+};
+
+const screenMap: Record<string, "challenge-detail" | "challenge-retail" | "challenge-agency" | "ecosystem-challenge"> = {
+  sponsor:   "challenge-detail",
+  brand:     "challenge-retail",
+  agency:    "challenge-agency",
+  ecosystem: "ecosystem-challenge",
 };
 
 const verticals = [
-  "Content AI",
-  "Customer Experience",
-  "Retail Media",
-  "Data & Insights",
-  "Loyalty",
-  "Automation",
+  "Content AI", "Customer Experience", "Retail Media",
+  "Data & Insights", "Loyalty", "Automation",
 ];
 
 export function Challenges() {
   const { go } = useNav();
+  const [challenges, setChallenges] = useState<Challenge[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchChallenges().then((data) => {
+      setChallenges(data as Challenge[]);
+      setLoading(false);
+    });
+  }, []);
 
   return (
     <div>
       <div className="flex items-end justify-between mx-0.5 mt-[18px] mb-[10px]">
-        <h3 className="m-0 text-[17px] font-bold tracking-tight">
-          Brand Challenges
-        </h3>
-        <button
-          onClick={() => go("challenge-create")}
-          className="text-[#FFD400] text-[12px] font-bold cursor-pointer bg-transparent border-0"
-        >
+        <h3 className="m-0 text-[17px] font-bold tracking-tight">Brand Challenges</h3>
+        <button onClick={() => go("challenge-create")} className="text-[#FFD400] text-[12px] font-bold cursor-pointer bg-transparent border-0">
           Publicar reto
         </button>
       </div>
 
-      <div className="grid gap-[10px] mb-4">
-        {challenges.map((c) => {
-          const colors = pillColors[c.type];
-          return (
-            <Card
-              key={c.title}
-              clickable
-              onClick={() => go(c.screen)}
-              className="relative overflow-hidden"
-            >
-              <span
-                className="inline-flex rounded-full px-[9px] py-[6px] text-[10px] font-black mb-[10px]"
-                style={{ background: colors.bg, color: colors.text }}
-              >
-                {c.typeLabel}
-              </span>
-              <h4 className="m-0 mb-1 text-[14px] font-semibold">{c.title}</h4>
-              <p className="m-0 text-[var(--muted)] text-[12px] leading-snug">
-                {c.desc}
-              </p>
-              <div className="flex gap-2 mt-3">
-                <button className="flex-1 border border-[rgba(255,255,255,.09)] bg-[rgba(255,255,255,.07)] text-[var(--text)] rounded-[14px] py-[10px] text-[12px] font-black cursor-pointer">
-                  {c.actions[0]}
-                </button>
-                <button className="flex-1 bg-[#FFD400] text-[#10131F] border-transparent rounded-[14px] py-[10px] text-[12px] font-black cursor-pointer">
-                  {c.actions[1]}
-                </button>
-              </div>
-            </Card>
-          );
-        })}
-      </div>
+      {loading ? (
+        <div className="grid gap-[10px] mb-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="rounded-[22px] border border-[rgba(255,255,255,.09)] p-[14px] animate-pulse" style={{ background: "rgba(23,29,52,.86)", height: 110 }} />
+          ))}
+        </div>
+      ) : (
+        <div className="grid gap-[10px] mb-4">
+          {challenges.length === 0 && (
+            <div className="rounded-[22px] border border-[rgba(255,255,255,.09)] p-5 text-center" style={{ background: "rgba(23,29,52,.86)" }}>
+              <p className="text-[var(--muted)] text-[13px] m-0">Sin challenges activos.</p>
+            </div>
+          )}
+          {challenges.map((c) => {
+            const colors = pillColors[c.type] ?? pillColors.brand;
+            const labels = actionLabels[c.type] ?? ["Ver", "Participar"];
+            const targetScreen = screenMap[c.type] ?? "challenge-detail";
+            return (
+              <Card key={c.id} clickable onClick={() => go(targetScreen)} className="relative overflow-hidden">
+                <span className="inline-flex rounded-full px-[9px] py-[6px] text-[10px] font-black mb-[10px]"
+                  style={{ background: colors.bg, color: colors.text }}>
+                  {typeLabels[c.type] ?? c.type}
+                </span>
+                <h4 className="m-0 mb-1 text-[14px] font-semibold">{c.title}</h4>
+                {c.description && (
+                  <p className="m-0 text-[var(--muted)] text-[12px] leading-snug line-clamp-2">{c.description}</p>
+                )}
+                <div className="flex items-center justify-between mt-2">
+                  <span className="text-[11px] font-black text-[#FFD400]">+{c.xp_reward} XP</span>
+                  {c.vertical && <span className="text-[11px] text-[var(--muted)]">{c.vertical}</span>}
+                  <span className="text-[11px] text-[var(--muted)]">{c.challenge_responses?.length ?? 0} propuestas</span>
+                </div>
+                <div className="flex gap-2 mt-3">
+                  <button className="flex-1 border border-[rgba(255,255,255,.09)] bg-[rgba(255,255,255,.07)] text-[var(--text)] rounded-[14px] py-[10px] text-[12px] font-black cursor-pointer">
+                    {labels[0]}
+                  </button>
+                  <button className="flex-1 bg-[#FFD400] text-[#10131F] border-transparent rounded-[14px] py-[10px] text-[12px] font-black cursor-pointer">
+                    {labels[1]}
+                  </button>
+                </div>
+              </Card>
+            );
+          })}
+        </div>
+      )}
 
       <div className="flex items-end justify-between mx-0.5 mt-[18px] mb-[10px]">
-        <h3 className="m-0 text-[17px] font-bold tracking-tight">
-          Verticales calientes
-        </h3>
+        <h3 className="m-0 text-[17px] font-bold tracking-tight">Verticales calientes</h3>
       </div>
-      <div
-        className="grid gap-[9px]"
-        style={{ gridTemplateColumns: "repeat(3,1fr)" }}
-      >
+      <div className="grid gap-[9px]" style={{ gridTemplateColumns: "repeat(3,1fr)" }}>
         {verticals.map((v) => (
-          <div
-            key={v}
-            className="rounded-[18px] border border-[rgba(255,255,255,.09)] bg-[rgba(255,255,255,.05)] p-3 text-[11px] font-black min-h-[70px] flex items-end"
-          >
+          <div key={v} className="rounded-[18px] border border-[rgba(255,255,255,.09)] bg-[rgba(255,255,255,.05)] p-3 text-[11px] font-black min-h-[70px] flex items-end">
             {v}
           </div>
         ))}

@@ -1,6 +1,8 @@
 "use client";
 
 import { useDispatch } from "@/lib/store";
+import { useDBUser } from "@/components/UserProvider";
+import { updateUserRole, addUserBadge } from "@/lib/db";
 import type { Role } from "@/types";
 
 const roles: { id: Role; icon: string; tag: string; desc: string }[] = [
@@ -19,10 +21,16 @@ interface Props {
 
 export function RolePickerSheet({ current, onSelect, onClose }: Props) {
   const dispatch = useDispatch();
+  const dbUser = useDBUser();
 
-  function pick(role: Role) {
+  async function pick(role: Role) {
     dispatch({ type: "SET_ROLE", role });
     dispatch({ type: "ADD_BADGE", badge: "Candidato" });
+    // Persist to DB
+    if (dbUser?.id) {
+      await updateUserRole(dbUser.id, role);
+      await addUserBadge(dbUser.id, "Candidato");
+    }
     onSelect(role);
   }
 
