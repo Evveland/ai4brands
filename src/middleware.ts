@@ -3,13 +3,24 @@ import { NextRequest, NextResponse } from "next/server";
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Protect all /admin routes except /admin/login
-  if (pathname.startsWith("/admin") && !pathname.startsWith("/admin/login")) {
-    const token = req.cookies.get("admin_token")?.value;
-    if (token !== process.env.ADMIN_SECRET) {
+  // Protect all /admin routes
+  if (pathname.startsWith("/admin")) {
+    const adminPassword = process.env.ADMIN_PASSWORD;
+
+    // Deny all if env var is not configured
+    if (!adminPassword) {
       const loginUrl = req.nextUrl.clone();
-      loginUrl.pathname = "/admin/login";
-      loginUrl.searchParams.set("from", pathname);
+      loginUrl.pathname = "/login";
+      loginUrl.search = `?error=config&from=${encodeURIComponent(pathname)}`;
+      return NextResponse.redirect(loginUrl);
+    }
+
+    const token = req.cookies.get("admin_token")?.value;
+
+    if (token !== adminPassword) {
+      const loginUrl = req.nextUrl.clone();
+      loginUrl.pathname = "/login";
+      loginUrl.search = `?from=${encodeURIComponent(pathname)}`;
       return NextResponse.redirect(loginUrl);
     }
   }
@@ -18,5 +29,6 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  // Match /admin and all sub-paths
+  matcher: ["/admin", "/admin/:path*"],
 };
