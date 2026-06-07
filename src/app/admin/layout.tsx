@@ -13,7 +13,9 @@ const navLinks = [
   { href: "/admin", label: "Dashboard", icon: "📊" },
   { href: "/admin/users", label: "Usuarios", icon: "👥" },
   { href: "/admin/startups", label: "Startups", icon: "🚀" },
-  { href: "/admin/challenges", label: "Challenges", icon: "🎯" },
+  { href: "/admin/agencies", label: "Agencias", icon: "🔎" },
+  { href: "/admin/brands", label: "Marcas / Media", icon: "🎯" },
+  { href: "/admin/challenges", label: "Challenges", icon: "⚡" },
   { href: "/admin/votes", label: "Votos & Awards", icon: "🏆" },
 ];
 
