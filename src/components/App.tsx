@@ -5,6 +5,10 @@ import { TopBar } from "@/components/TopBar";
 import { BottomNav } from "@/components/BottomNav";
 import { Home } from "@/components/screens/Home";
 import { Challenges } from "@/components/screens/Challenges";
+import { StartupQuestPage } from "@/components/quest/StartupQuestPage";
+import { AgencyQuestPage } from "@/components/quest/AgencyQuestPage";
+import { BrandQuestPage } from "@/components/quest/BrandQuestPage";
+import { InstitutionalQuestPage } from "@/components/quest/InstitutionalQuestPage";
 import { Scout } from "@/components/screens/Scout";
 import { Rankings } from "@/components/screens/Rankings";
 import { Rewards } from "@/components/screens/Rewards";
@@ -31,6 +35,7 @@ import {
 
 const INNER_SCREENS = new Set([
   "role-matrix", "role-database", "quest-profile", "capabilities-page",
+  "startup-quest", "agency-quest", "brand-quest", "institutional-quest",
   "pilot-page", "invite-page", "challenge-detail", "challenge-response",
   "challenge-retail", "challenge-agency", "challenge-create", "startup-detail",
   "startup-ugc", "startup-match", "meeting-page", "agency-dashboard",
@@ -47,6 +52,10 @@ function ScreenRenderer() {
 
   switch (screen) {
     case "home": return <Home />;
+    case "startup-quest": return <StartupQuestPage />;
+    case "agency-quest": return <AgencyQuestPage />;
+    case "brand-quest": return <BrandQuestPage />;
+    case "institutional-quest": return <InstitutionalQuestPage />;
     case "quests":
     case "role-quest": return <Quests />;
     case "challenges": return <Challenges />;

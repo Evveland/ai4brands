@@ -7,36 +7,36 @@ import { Badge } from "@/components/ui/Badge";
 import type { Role, Screen } from "@/types";
 
 const quests: { screen: Screen; icon: string; title: string; desc: string; xp: string; role: Role }[] = [
-  { screen: "quests", icon: "🚀", title: "Startup Quest", desc: "Completa perfil, presenta un piloto IA y gana acceso con XP.", xp: "+1,000 XP", role: "startup" },
-  { screen: "agency-quest-page", icon: "🔎", title: "Agency Quest", desc: "Descubre startups, recomienda soluciones y crea briefs para clientes.", xp: "+850 XP", role: "agency" },
-  { screen: "brand-quest-page", icon: "🎯", title: "Brand Quest", desc: "Publica retos reales, vota propuestas y solicita reuniones de piloto.", xp: "+900 XP", role: "brand" },
-  { screen: "institutional-quest-page", icon: "🌐", title: "Institutional Quest", desc: "Aceleradoras, incubadoras y hubs compiten activando sus startups.", xp: "+1,200 XP", role: "institutional" },
+  { screen: "startup-quest", icon: "🚀", title: "Startup Quest", desc: "Registra tu startup, recibe aprobación y gana acceso con XP.", xp: "+1,000 XP", role: "startup" },
+  { screen: "agency-quest", icon: "🔎", title: "Agency Quest", desc: "Registra tu agencia, haz scouting y crea briefs para clientes.", xp: "+850 XP", role: "agency" },
+  { screen: "brand-quest", icon: "🎯", title: "Brand Quest", desc: "Registra tu marca, publica retos reales y solicita reuniones.", xp: "+900 XP", role: "brand" },
+  { screen: "institutional-quest", icon: "🌐", title: "Institutional Quest", desc: "Registra tu ecosistema y activa tu comunidad de startups.", xp: "+1,200 XP", role: "institutional" },
 ];
 
 const roleHero: Record<Role, { title: string; desc: string; cta: string; ctaScreen: Screen }> = {
   startup: {
     title: "Construye tu piloto. Gana acceso.",
-    desc: "Completa tu perfil Startup Ready, responde un challenge y consigue reuniones con marcas y agencias.",
+    desc: "Registra tu startup, recibe aprobación de AI4Brands y desbloquea tu Quest completo.",
     cta: "Ir a Startup Quest",
-    ctaScreen: "quests",
+    ctaScreen: "startup-quest",
   },
   agency: {
     title: "Descubre IA para tus clientes.",
-    desc: "Actúa como scout, crea briefs y recomienda startups con potencial de piloto real.",
+    desc: "Registra tu agencia, actúa como scout y conecta startups con las marcas que trabajas.",
     cta: "Ir a Agency Quest",
-    ctaScreen: "agency-quest-page",
+    ctaScreen: "agency-quest",
   },
   brand: {
     title: "Lanza retos reales de innovación.",
-    desc: "Publica un challenge, vota propuestas y conecta con startups listas para pilotar.",
+    desc: "Registra tu marca, publica un challenge y conecta con startups listas para pilotar.",
     cta: "Ir a Brand Quest",
-    ctaScreen: "brand-quest-page",
+    ctaScreen: "brand-quest",
   },
   institutional: {
     title: "Activa tu ecosistema de startups.",
-    desc: "Invita startups, forma equipo y compite por el Ecosystem Champion Award.",
+    desc: "Registra tu organización, invita tu cohort y compite por el Ecosystem Champion Award.",
     cta: "Ir a Institutional Quest",
-    ctaScreen: "institutional-quest-page",
+    ctaScreen: "institutional-quest",
   },
   curator: {
     title: "Valida, cuida y patrocina.",

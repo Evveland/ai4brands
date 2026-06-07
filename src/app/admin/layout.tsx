@@ -11,6 +11,7 @@ async function logoutAction() {
 
 const navLinks = [
   { href: "/admin", label: "Dashboard", icon: "📊" },
+  { href: "/admin/approvals", label: "Aprobaciones", icon: "✅" },
   { href: "/admin/users", label: "Usuarios", icon: "👥" },
   { href: "/admin/startups", label: "Startups", icon: "🚀" },
   { href: "/admin/agencies", label: "Agencias", icon: "🔎" },
