@@ -1,6 +1,7 @@
 "use client";
 
-import { useNav } from "@/lib/store";
+import { useState } from "react";
+import { useNav, useDispatch } from "@/lib/store";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -422,6 +423,23 @@ export function InvitePage() {
 /* ─── Profile Page ─── */
 export function ProfilePage() {
   const { go } = useNav();
+  const dispatch = useDispatch();
+
+  const [name, setName] = useState("");
+  const [vertical, setVertical] = useState("Content AI");
+  const [pitch, setPitch] = useState("");
+  const [client, setClient] = useState("");
+  const [saved, setSaved] = useState(false);
+
+  function handleSave(e: React.FormEvent) {
+    e.preventDefault();
+    if (!name.trim() || !pitch.trim()) return;
+    dispatch({ type: "ADD_XP", amount: 220 });
+    dispatch({ type: "ADD_BADGE", badge: "Perfil Iniciado" });
+    setSaved(true);
+    setTimeout(() => go("promotion-page"), 900);
+  }
+
   return (
     <div>
       <BackBar title="Perfil" subtitle="Startup Ready" />
@@ -430,24 +448,73 @@ export function ProfilePage() {
         <h2 className="text-[22px] font-black tracking-tight leading-tight mt-2 mb-2">Haz clara tu oportunidad.</h2>
         <p className="m-0 text-[#DCE3FF] text-[13px] leading-relaxed">Completa solo lo necesario para que agencias y marcas entiendan tu piloto.</p>
       </div>
+
       <details className="border border-[rgba(255,255,255,.09)] bg-[rgba(23,29,52,.86)] rounded-[22px] overflow-hidden mb-[10px]" open>
         <summary className="list-none cursor-pointer p-[14px] flex gap-3 items-center">
           <div className="min-w-[42px] h-[42px] rounded-[15px] grid place-items-center text-[20px] bg-[rgba(255,255,255,.08)]">🧾</div>
-          <div className="flex-1"><h4 className="m-0 mb-1 text-[14px] font-semibold">Ficha básica</h4><p className="m-0 text-[var(--muted)] text-[12px]">Nombre, vertical, pitch y cliente ideal.</p></div>
+          <div className="flex-1">
+            <h4 className="m-0 mb-1 text-[14px] font-semibold">Ficha básica</h4>
+            <p className="m-0 text-[var(--muted)] text-[12px]">Nombre, vertical, pitch y cliente ideal.</p>
+          </div>
           <div className="text-[#FFD400] font-black text-[12px] ml-auto">+220 XP</div>
           <div className="w-[28px] h-[28px] rounded-full grid place-items-center bg-[rgba(255,255,255,.07)] text-[#FFD400] font-black ml-2">⌄</div>
         </summary>
-        <div className="p-[14px] border-t border-[rgba(255,255,255,.09)]">
-          <Field label="Nombre de la startup"><input className={inputCls} placeholder="Ej: CXFlow AI" /></Field>
-          <Field label="Vertical principal">
-            <select className={inputCls}><option>Content AI</option><option>Customer Experience</option><option>Data & Insights</option><option>Loyalty & Gamification</option><option>Automation</option></select>
+
+        <form onSubmit={handleSave} className="p-[14px] border-t border-[rgba(255,255,255,.09)]">
+          <Field label="Nombre de la startup *">
+            <input
+              required
+              className={inputCls}
+              placeholder="Ej: CXFlow AI"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </Field>
-          <Field label="Pitch en una frase"><textarea className={`${inputCls} min-h-[60px] resize-y`} placeholder="Ayudamos a marcas a... con IA..." /></Field>
-          <Field label="Cliente ideal"><input className={inputCls} placeholder="Ej: retail, banca, turismo, gran consumo" /></Field>
-          <Button full>Guardar perfil</Button>
-        </div>
+          <Field label="Vertical principal">
+            <select className={inputCls} value={vertical} onChange={(e) => setVertical(e.target.value)}>
+              <option>Content AI</option>
+              <option>Customer Experience</option>
+              <option>Data & Insights</option>
+              <option>Loyalty & Gamification</option>
+              <option>Automation</option>
+            </select>
+          </Field>
+          <Field label="Pitch en una frase *">
+            <textarea
+              required
+              className={`${inputCls} min-h-[60px] resize-y`}
+              placeholder="Ayudamos a marcas a... con IA..."
+              value={pitch}
+              onChange={(e) => setPitch(e.target.value)}
+            />
+          </Field>
+          <Field label="Cliente ideal">
+            <input
+              className={inputCls}
+              placeholder="Ej: retail, banca, turismo, gran consumo"
+              value={client}
+              onChange={(e) => setClient(e.target.value)}
+            />
+          </Field>
+
+          <button
+            type="submit"
+            disabled={saved}
+            className="w-full mt-3 rounded-[16px] py-3 font-black text-[14px] border-0 cursor-pointer transition-all"
+            style={{
+              background: saved ? "rgba(77,255,157,.2)" : "#FFD400",
+              color: saved ? "#4DFF9D" : "#10131F",
+              boxShadow: saved ? "none" : "0 10px 25px rgba(255,212,0,.22)",
+            }}
+          >
+            {saved ? "✓ Perfil guardado · +220 XP" : "Guardar perfil"}
+          </button>
+        </form>
       </details>
-      <Button full variant="secondary" onClick={() => go("promotion-page")}>Siguiente: Promoción</Button>
+
+      <Button full variant="secondary" onClick={() => go("promotion-page")}>
+        Siguiente: Promoción
+      </Button>
     </div>
   );
 }
