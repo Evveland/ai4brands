@@ -53,7 +53,7 @@ export function Onboarding() {
 
   function selectRole(role: Role) {
     dispatch({ type: "SET_ROLE", role });
-    dispatch({ type: "ADD_BADGE", badge: "Applicant" });
+    dispatch({ type: "ADD_BADGE", badge: "Candidato" });
     go("home");
   }
 

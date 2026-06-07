@@ -157,10 +157,10 @@ export function Rewards() {
         </summary>
         <div className="p-[14px] border-t border-[rgba(255,255,255,.09)] grid gap-[9px]">
           {[
-            { title: "Startup Badges", sub: "Applicant, Startup Ready, Challenge Finalist, Pilot Ready", icon: "🚀", screen: "badges-page" as const },
-            { title: "Agency Badges", sub: "Scout, Recommender, Brief Builder, Top Connector", icon: "🔎", screen: "badges-page" as const },
-            { title: "Brand Badges", sub: "Challenge Owner, Innovation Buyer, Pilot Sponsor", icon: "🎯", screen: "badges-page" as const },
-            { title: "Ecosystem Badges", sub: "Community Partner, Talent Activator, Ecosystem Champion", icon: "🌐", screen: "badges-page" as const },
+            { title: "Badges Startup", sub: "Candidato, Startup Listo, Finalista, Listo para Piloto", icon: "🚀", screen: "badges-page" as const },
+            { title: "Badges Agencia", sub: "Scout de Agencia, Recomendador, Creador de Briefs, Conector Top", icon: "🔎", screen: "badges-page" as const },
+            { title: "Badges Marca", sub: "Dueño del Reto, Comprador de Innovación, Patrocinador de Piloto", icon: "🎯", screen: "badges-page" as const },
+            { title: "Badges Ecosistema", sub: "Socio Comunitario, Activador de Talento, Campeón del Ecosistema", icon: "🌐", screen: "badges-page" as const },
           ].map((item) => (
             <div
               key={item.title}
@@ -189,7 +189,7 @@ export function Rewards() {
         </summary>
         <div className="p-[14px] border-t border-[rgba(255,255,255,.09)] grid gap-[9px]">
           {[
-            { title: "Applicant Badge", sub: "Completar registro", icon: "✅" },
+            { title: "Badge Candidato", sub: "Completar registro", icon: "✅" },
             { title: "Entrada gratuita", sub: "1,000 XP", icon: "🔒" },
             { title: "Pitch Slot", sub: "2,000 XP + selección agencia", icon: "🔒" },
             { title: "Reunión con sponsor", sub: "Top 20 startups", icon: "🔒" },

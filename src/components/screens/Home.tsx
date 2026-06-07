@@ -246,7 +246,7 @@ export function Home() {
         </div>
         <div className="flex gap-2 flex-wrap mt-3">
           {badges.map((b) => (
-            <Badge key={b} variant={b === "Applicant" ? "gold" : b === "Profile Started" ? "green" : "default"}>
+            <Badge key={b} variant={b === "Candidato" ? "gold" : b === "Perfil Iniciado" ? "green" : "default"}>
               {b}
             </Badge>
           ))}

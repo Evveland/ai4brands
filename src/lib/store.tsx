@@ -49,7 +49,7 @@ const initialState: AppState = {
   history: ["onboarding"],
   role: null,
   xp: 620,
-  badges: ["Applicant", "Community Joined", "Profile Started"],
+  badges: ["Candidato", "Comunidad Unida", "Perfil Iniciado"],
 };
 
 const StateCtx = createContext<AppState>(initialState);
