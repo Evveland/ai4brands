@@ -3,7 +3,6 @@
 import { useAppState } from "@/lib/store";
 import { TopBar } from "@/components/TopBar";
 import { BottomNav } from "@/components/BottomNav";
-import { Onboarding } from "@/components/screens/Onboarding";
 import { Home } from "@/components/screens/Home";
 import { Challenges } from "@/components/screens/Challenges";
 import { Scout } from "@/components/screens/Scout";
@@ -47,7 +46,6 @@ function ScreenRenderer() {
   const { screen } = useAppState();
 
   switch (screen) {
-    case "onboarding": return <Onboarding />;
     case "home": return <Home />;
     case "quests":
     case "role-quest": return <Quests />;
@@ -90,8 +88,10 @@ export function App() {
   const isInner = INNER_SCREENS.has(screen);
 
   return (
-    <div className="w-full max-w-[430px] mx-auto min-h-screen relative px-4 pb-[92px] pt-4"
-      style={{ background: "linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0))" }}>
+    <div
+      className="w-full max-w-[430px] mx-auto min-h-screen relative px-4 pb-[92px] pt-4"
+      style={{ background: "linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0))" }}
+    >
       {!isInner && <TopBar />}
       <ScreenRenderer />
       <BottomNav />

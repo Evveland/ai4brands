@@ -45,8 +45,8 @@ function reducer(state: AppState, action: Action): AppState {
 }
 
 const initialState: AppState = {
-  screen: "onboarding",
-  history: ["onboarding"],
+  screen: "home",
+  history: ["home"],
   role: null,
   xp: 620,
   badges: ["Candidato", "Comunidad Unida", "Perfil Iniciado"],
