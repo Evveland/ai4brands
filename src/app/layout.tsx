@@ -25,7 +25,10 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <head>
-        <script src="https://telegram.org/js/telegram-web-app.js" async />
+        {/* Telegram MiniApp SDK — must load before React hydration */}
+        <script src="https://telegram.org/js/telegram-web-app.js" />
+        {/* Tell Telegram this is a full-screen app */}
+        <meta name="telegram:web_app" content="fullscreen" />
       </head>
       <body className={inter.className}>{children}</body>
     </html>

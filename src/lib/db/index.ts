@@ -2,6 +2,20 @@ import { createClient } from "@/lib/supabase/client";
 
 /* ─── User identity ─────────────────────────────────────────────── */
 
+interface TgUser {
+  id: number;
+  first_name?: string;
+  last_name?: string;
+  username?: string;
+  language_code?: string;
+  photo_url?: string;
+}
+
+function getTelegramUser(): TgUser | null {
+  if (typeof window === "undefined") return null;
+  return (window as any).Telegram?.WebApp?.initDataUnsafe?.user ?? null;
+}
+
 function getOrCreateLocalId(): number {
   if (typeof window === "undefined") return 0;
   let id = localStorage.getItem("ai4brands_uid");
@@ -14,7 +28,18 @@ function getOrCreateLocalId(): number {
 
 export async function getOrCreateUser() {
   const supabase = createClient();
-  const telegramId = getOrCreateLocalId();
+
+  // Prefer real Telegram identity when running inside Telegram
+  const tgUser = getTelegramUser();
+  const telegramId = tgUser?.id ?? getOrCreateLocalId();
+  const firstName = tgUser?.first_name ?? null;
+  const handle = tgUser?.username ?? null;
+
+  // Expand the Telegram WebApp to full height
+  if (typeof window !== "undefined") {
+    (window as any).Telegram?.WebApp?.expand();
+    (window as any).Telegram?.WebApp?.ready();
+  }
 
   // Try existing
   const { data: existing } = await supabase
@@ -23,12 +48,24 @@ export async function getOrCreateUser() {
     .eq("telegram_id", telegramId)
     .maybeSingle();
 
-  if (existing) return existing;
+  if (existing) {
+    // Update name/handle if they changed
+    if (
+      (firstName && existing.first_name !== firstName) ||
+      (handle && existing.telegram_handle !== handle)
+    ) {
+      await supabase
+        .from("users")
+        .update({ first_name: firstName, telegram_handle: handle })
+        .eq("id", existing.id);
+    }
+    return existing;
+  }
 
   // Create new
   const { data: created } = await supabase
     .from("users")
-    .insert([{ telegram_id: telegramId }])
+    .insert([{ telegram_id: telegramId, first_name: firstName, telegram_handle: handle }])
     .select()
     .single();
 

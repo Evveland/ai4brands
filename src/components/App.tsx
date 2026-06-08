@@ -3,6 +3,7 @@
 import { useAppState } from "@/lib/store";
 import { TopBar } from "@/components/TopBar";
 import { BottomNav } from "@/components/BottomNav";
+import { TelegramInit } from "@/components/TelegramInit";
 import { Home } from "@/components/screens/Home";
 import { Challenges } from "@/components/screens/Challenges";
 import { StartupQuestPage } from "@/components/quest/StartupQuestPage";
@@ -97,6 +98,8 @@ export function App() {
   const isInner = INNER_SCREENS.has(screen);
 
   return (
+    <>
+    <TelegramInit />
     <div
       className="w-full max-w-[430px] mx-auto min-h-screen relative px-4 pb-[92px] pt-4"
       style={{ background: "linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0))" }}
@@ -105,5 +108,6 @@ export function App() {
       <ScreenRenderer />
       <BottomNav />
     </div>
+    </>
   );
 }
