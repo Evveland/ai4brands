@@ -48,8 +48,8 @@ const initialState: AppState = {
   screen: "home",
   history: ["home"],
   role: null,
-  xp: 620,
-  badges: ["Candidato", "Comunidad Unida", "Perfil Iniciado"],
+  xp: 0,
+  badges: [],
 };
 
 const StateCtx = createContext<AppState>(initialState);

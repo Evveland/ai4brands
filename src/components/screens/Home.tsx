@@ -1,6 +1,7 @@
 "use client";
 
 import { useAppState, useNav } from "@/lib/store";
+import { useDBUser } from "@/components/UserProvider";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -107,9 +108,16 @@ function ExpandCard({ icon, title, subtitle, children }: { icon: string; title: 
   );
 }
 
+const roleLabels: Record<Role, string> = {
+  startup: "Startup", agency: "Agencia", brand: "Marca",
+  media: "Medio", university: "Universidad", investor: "Inversor",
+  hub: "Hub & Lab", institutional: "Institucional", curator: "Curador",
+};
+
 export function Home() {
   const { role, xp, badges } = useAppState();
   const { go } = useNav();
+  const dbUser = useDBUser();
 
   const hero = role ? roleHero[role] : null;
   const visibleQuests = role ? quests.filter((q) => q.role === role) : quests;
@@ -273,22 +281,57 @@ export function Home() {
       </div>
 
       <Card>
+        {/* ── User identity ── */}
+        <div className="flex items-center gap-3 mb-4 pb-4 border-b border-[rgba(255,255,255,.07)]">
+          <div
+            className="w-[44px] h-[44px] rounded-[15px] grid place-items-center font-black text-[18px] flex-none"
+            style={{ background: "linear-gradient(135deg,rgba(255,212,0,.3),rgba(68,215,255,.3))" }}
+          >
+            {(dbUser?.first_name ?? dbUser?.telegram_handle ?? "?").charAt(0).toUpperCase()}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="font-black text-[14px] text-white truncate">
+              {dbUser?.first_name ?? (dbUser?.telegram_handle ? `@${dbUser.telegram_handle}` : "Cargando…")}
+            </div>
+            <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+              {dbUser?.telegram_handle && (
+                <span className="text-[11px] font-mono" style={{ color: "#44D7FF" }}>@{dbUser.telegram_handle}</span>
+              )}
+              {role && (
+                <span className="text-[10px] font-black px-2 py-0.5 rounded-full"
+                  style={{ background: "rgba(255,212,0,.15)", color: "#FFD400" }}>
+                  {roleLabels[role]}
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="text-right flex-none">
+            <div className="font-black text-[18px]" style={{ color: "#FFD400" }}>{xp.toLocaleString()}</div>
+            <div className="text-[10px] text-[#737D9D]">XP total</div>
+          </div>
+        </div>
+
+        {/* ── XP bar ── */}
         <div className="flex justify-between text-[12px] text-[var(--muted)] mb-[7px]">
           <span>Acceso AI4Brands</span>
-          <b>{xp} / 1,000 XP</b>
+          <b>{xp.toLocaleString()} / 1,000 XP</b>
         </div>
         <div className="h-[10px] bg-[rgba(255,255,255,.08)] rounded-full overflow-hidden">
           <div
-            className="h-full rounded-full"
+            className="h-full rounded-full transition-all duration-700"
             style={{ background: "linear-gradient(90deg,#FFD400,#44D7FF)", width: `${Math.min((xp / 1000) * 100, 100)}%` }}
           />
         </div>
         <div className="flex gap-2 flex-wrap mt-3">
-          {badges.map((b) => (
-            <Badge key={b} variant={b === "Candidato" ? "gold" : b === "Perfil Iniciado" ? "green" : "default"}>
-              {b}
-            </Badge>
-          ))}
+          {badges.length === 0 ? (
+            <Badge>Sin badges todavía</Badge>
+          ) : (
+            badges.map((b) => (
+              <Badge key={b} variant={b === "Candidato" ? "gold" : b === "Perfil Iniciado" ? "green" : "default"}>
+                {b}
+              </Badge>
+            ))
+          )}
         </div>
       </Card>
     </div>
