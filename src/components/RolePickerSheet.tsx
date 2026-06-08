@@ -47,26 +47,30 @@ export function RolePickerSheet({ current, onSelect, onClose }: Props) {
         onClick={onClose}
       />
 
-      {/* Sheet */}
+      {/* Sheet — max 85vh so it never overflows, inner list scrolls */}
       <div
-        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 rounded-t-[28px] p-5 pb-8"
+        className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] z-50 rounded-t-[28px] flex flex-col"
         style={{
+          maxHeight: "85dvh",
           background: "rgba(18,23,42,.98)",
           border: "1px solid rgba(255,255,255,.1)",
           borderBottom: "none",
           boxShadow: "0 -20px 60px rgba(0,0,0,.5)",
         }}
       >
-        {/* Handle */}
-        <div className="w-10 h-1 rounded-full mx-auto mb-5" style={{ background: "rgba(255,255,255,.2)" }} />
+        {/* Fixed header */}
+        <div className="px-5 pt-5 pb-0 flex-none">
+          <div className="w-10 h-1 rounded-full mx-auto mb-4" style={{ background: "rgba(255,255,255,.2)" }} />
+          <h3 className="text-[18px] font-black tracking-tight text-white m-0 mb-1">
+            Elige tu camino
+          </h3>
+          <p className="text-[12px] m-0 mb-3" style={{ color: "#A9B1CB" }}>
+            Define tu rol en el ecosistema AI4Brands.
+          </p>
+        </div>
 
-        <h3 className="text-[18px] font-black tracking-tight text-white m-0 mb-1">
-          Elige tu camino
-        </h3>
-        <p className="text-[12px] m-0 mb-4" style={{ color: "#A9B1CB" }}>
-          Define tu rol en el ecosistema AI4Brands.
-        </p>
-
+        {/* Scrollable role list */}
+        <div className="overflow-y-auto flex-1 px-5 pb-2">
         <div className="grid gap-[8px]">
           {roles.map((r) => {
             const isSelected = current === r.id;
@@ -92,14 +96,18 @@ export function RolePickerSheet({ current, onSelect, onClose }: Props) {
             );
           })}
         </div>
+        </div>{/* end scroll area */}
 
-        <button
-          onClick={onClose}
-          className="w-full mt-4 rounded-[14px] py-3 text-[13px] font-black cursor-pointer border-0"
-          style={{ background: "rgba(255,255,255,.07)", color: "#A9B1CB" }}
-        >
-          Cancelar
-        </button>
+        {/* Fixed footer */}
+        <div className="px-5 pt-2 pb-6 flex-none border-t" style={{ borderColor: "rgba(255,255,255,.07)" }}>
+          <button
+            onClick={onClose}
+            className="w-full rounded-[14px] py-3 text-[13px] font-black cursor-pointer border-0"
+            style={{ background: "rgba(255,255,255,.07)", color: "#A9B1CB" }}
+          >
+            Cancelar
+          </button>
+        </div>
       </div>
     </>
   );
