@@ -10,14 +10,18 @@ async function logoutAction() {
 }
 
 const navLinks = [
-  { href: "/admin", label: "Dashboard", icon: "📊" },
-  { href: "/admin/approvals", label: "Aprobaciones", icon: "✅" },
-  { href: "/admin/users", label: "Usuarios", icon: "👥" },
-  { href: "/admin/startups", label: "Startups", icon: "🚀" },
-  { href: "/admin/agencies", label: "Agencias", icon: "🔎" },
-  { href: "/admin/brands", label: "Marcas / Media", icon: "🎯" },
-  { href: "/admin/challenges", label: "Challenges", icon: "⚡" },
-  { href: "/admin/votes", label: "Votos & Awards", icon: "🏆" },
+  { href: "/admin",            label: "Dashboard",     icon: "📊" },
+  { href: "/admin/approvals",  label: "Aprobaciones",  icon: "✅" },
+  { href: "/admin/users",      label: "Usuarios",      icon: "👥" },
+  { href: "/admin/startups",   label: "Startups",      icon: "🚀" },
+  { href: "/admin/agencies",   label: "Agencias",      icon: "🔎" },
+  { href: "/admin/brands",     label: "Marcas",        icon: "🎯" },
+  { href: "/admin/media-orgs", label: "Medios",        icon: "📺" },
+  { href: "/admin/universities",label: "Universidades",icon: "🎓" },
+  { href: "/admin/investors",  label: "Inversores",    icon: "💰" },
+  { href: "/admin/hubs",       label: "Hubs & Labs",   icon: "🏗️" },
+  { href: "/admin/challenges", label: "Challenges",    icon: "⚡" },
+  { href: "/admin/votes",      label: "Votos & Awards",icon: "🏆" },
 ];
 
 export default function AdminLayout({

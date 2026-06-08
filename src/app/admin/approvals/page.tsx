@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { fetchPendingOrgs, fetchAllOrgs } from "@/lib/db/orgs";
 import { SectionHeader, AdminCard, StatusPill } from "@/components/admin/AdminCard";
 import { approveOrgAction } from "@/lib/supabase/approval-actions";
