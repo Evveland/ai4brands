@@ -1,8 +1,10 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useDispatch } from "@/lib/store";
 import { useDBUser } from "@/components/UserProvider";
 import { updateUserRole, addUserBadge } from "@/lib/db";
+import { getUserOrg } from "@/lib/db/orgs";
 import type { Role } from "@/types";
 
 const roles: { id: Role; icon: string; tag: string; desc: string }[] = [
@@ -26,11 +28,19 @@ interface Props {
 export function RolePickerSheet({ current, onSelect, onClose }: Props) {
   const dispatch = useDispatch();
   const dbUser = useDBUser();
+  const [hasOrg, setHasOrg] = useState(false);
+
+  // Check if user already has a registered org (locks role switching)
+  useEffect(() => {
+    if (!dbUser?.id) return;
+    getUserOrg(dbUser.id).then((org) => setHasOrg(!!org));
+  }, [dbUser?.id]);
 
   async function pick(role: Role) {
+    // If registered, only allow clicking the current role (to navigate to quest)
+    if (hasOrg && role !== current) return;
     dispatch({ type: "SET_ROLE", role });
     dispatch({ type: "ADD_BADGE", badge: "Candidato" });
-    // Persist to DB
     if (dbUser?.id) {
       await updateUserRole(dbUser.id, role);
       await addUserBadge(dbUser.id, "Candidato");
@@ -62,10 +72,12 @@ export function RolePickerSheet({ current, onSelect, onClose }: Props) {
         <div className="px-5 pt-5 pb-0 flex-none">
           <div className="w-10 h-1 rounded-full mx-auto mb-4" style={{ background: "rgba(255,255,255,.2)" }} />
           <h3 className="text-[18px] font-black tracking-tight text-white m-0 mb-1">
-            Elige tu camino
+            {hasOrg ? "Tu camino en AI4Brands" : "Elige tu camino"}
           </h3>
           <p className="text-[12px] m-0 mb-3" style={{ color: "#A9B1CB" }}>
-            Define tu rol en el ecosistema AI4Brands.
+            {hasOrg
+              ? "Ya estás registrado. Tu rol queda fijo una vez que has enviado tu solicitud."
+              : "Define tu rol en el ecosistema AI4Brands."}
           </p>
         </div>
 
@@ -74,24 +86,33 @@ export function RolePickerSheet({ current, onSelect, onClose }: Props) {
         <div className="grid gap-[8px]">
           {roles.map((r) => {
             const isSelected = current === r.id;
+            const isLocked = hasOrg && !isSelected;
             return (
               <button
                 key={r.id}
                 onClick={() => pick(r.id)}
-                className="flex items-center gap-3 w-full text-left rounded-[16px] px-4 py-3 border cursor-pointer transition-all"
+                disabled={isLocked}
+                className="flex items-center gap-3 w-full text-left rounded-[16px] px-4 py-3 border transition-all"
                 style={{
-                  background: isSelected ? "rgba(255,212,0,.12)" : "rgba(255,255,255,.05)",
-                  border: isSelected ? "1px solid rgba(255,212,0,.5)" : "1px solid rgba(255,255,255,.09)",
+                  background: isSelected ? "rgba(255,212,0,.12)" : "rgba(255,255,255,.04)",
+                  border: isSelected ? "1px solid rgba(255,212,0,.5)" : "1px solid rgba(255,255,255,.07)",
+                  cursor: isLocked ? "default" : "pointer",
+                  opacity: isLocked ? 0.35 : 1,
                 }}
               >
-                <span className="text-[22px] flex-none">{r.icon}</span>
+                <span className="text-[22px] flex-none" style={{ filter: isLocked ? "grayscale(1)" : "none" }}>
+                  {r.icon}
+                </span>
                 <div className="flex-1 min-w-0">
-                  <div className="text-[13px] font-black text-white leading-none">{r.tag}</div>
-                  <div className="text-[11px] mt-0.5" style={{ color: "#A9B1CB" }}>{r.desc}</div>
+                  <div className="text-[13px] font-black leading-none" style={{ color: isLocked ? "#737D9D" : "white" }}>
+                    {r.tag}
+                  </div>
+                  <div className="text-[11px] mt-0.5" style={{ color: isLocked ? "#4a5068" : "#A9B1CB" }}>
+                    {isLocked ? "No disponible" : r.desc}
+                  </div>
                 </div>
-                {isSelected && (
-                  <span className="text-[18px] flex-none">✓</span>
-                )}
+                {isSelected && <span className="text-[18px] flex-none">✓</span>}
+                {isLocked && <span className="text-[14px] flex-none" style={{ color: "#4a5068" }}>🔒</span>}
               </button>
             );
           })}
