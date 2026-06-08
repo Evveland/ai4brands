@@ -135,6 +135,19 @@ export function App() {
     >
       {!isInner && <TopBar />}
       <ScreenRenderer />
+      {/* Powered by footer — sits above BottomNav */}
+      <div className="text-center pb-[10px] mt-4">
+        <a
+          href="https://evveland.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[10px] no-underline"
+          style={{ color: "#737D9D" }}
+        >
+          Powered by{" "}
+          <span className="font-black" style={{ color: "#A9B1CB" }}>Evveland</span>
+        </a>
+      </div>
       <BottomNav />
     </div>
     </>
