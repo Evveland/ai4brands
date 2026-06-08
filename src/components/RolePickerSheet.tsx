@@ -6,11 +6,15 @@ import { updateUserRole, addUserBadge } from "@/lib/db";
 import type { Role } from "@/types";
 
 const roles: { id: Role; icon: string; tag: string; desc: string }[] = [
-  { id: "startup",      icon: "🚀", tag: "Startup",      desc: "Presento una solución de IA" },
-  { id: "agency",       icon: "🔎", tag: "Agencia",      desc: "Actúo como scout para clientes" },
-  { id: "brand",        icon: "🎯", tag: "Marca",        desc: "Lanzo retos reales de innovación" },
-  { id: "institutional",icon: "🌐", tag: "Institucional",desc: "Activo mi ecosistema de startups" },
-  { id: "curator",      icon: "⚖️", tag: "Yellow / Jurado","desc": "Curar, validar o patrocinar" },
+  { id: "startup",      icon: "🚀", tag: "Startup",       desc: "Presento una solución de IA para marketing" },
+  { id: "agency",       icon: "🔎", tag: "Agencia",       desc: "Actúo como scout de innovación para clientes" },
+  { id: "brand",        icon: "🎯", tag: "Marca",         desc: "Lanzo retos reales de IA y busco pilotos" },
+  { id: "media",        icon: "📺", tag: "Medio",         desc: "Cobertura, contenido y difusión del evento" },
+  { id: "university",   icon: "🎓", tag: "Universidad",   desc: "Conecto talento académico con la industria" },
+  { id: "investor",     icon: "💰", tag: "Inversor",      desc: "Descubro startups con potencial de inversión" },
+  { id: "hub",          icon: "🏗️", tag: "Hub & Lab",     desc: "Activo mi comunidad de innovación" },
+  { id: "institutional",icon: "🌐", tag: "Institucional", desc: "Aceleradora, incubadora o ecosistema de startups" },
+  { id: "curator",      icon: "⚖️", tag: "Yellow / Jurado", desc: "Curar, validar o patrocinar AI4Brands" },
 ];
 
 interface Props {

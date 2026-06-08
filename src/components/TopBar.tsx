@@ -11,6 +11,10 @@ const roleLabels: Record<Role, string> = {
   brand: "Marca",
   institutional: "Institucional",
   curator: "Curador",
+  media: "Medio",
+  university: "Universidad",
+  investor: "Inversor",
+  hub: "Hub & Lab",
 };
 
 export function TopBar() {

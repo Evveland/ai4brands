@@ -7,10 +7,14 @@ import { Badge } from "@/components/ui/Badge";
 import type { Role, Screen } from "@/types";
 
 const quests: { screen: Screen; icon: string; title: string; desc: string; xp: string; role: Role }[] = [
-  { screen: "startup-quest", icon: "🚀", title: "Startup Quest", desc: "Registra tu startup, recibe aprobación y gana acceso con XP.", xp: "+1,000 XP", role: "startup" },
-  { screen: "agency-quest", icon: "🔎", title: "Agency Quest", desc: "Registra tu agencia, haz scouting y crea briefs para clientes.", xp: "+850 XP", role: "agency" },
-  { screen: "brand-quest", icon: "🎯", title: "Brand Quest", desc: "Registra tu marca, publica retos reales y solicita reuniones.", xp: "+900 XP", role: "brand" },
-  { screen: "institutional-quest", icon: "🌐", title: "Institutional Quest", desc: "Registra tu ecosistema y activa tu comunidad de startups.", xp: "+1,200 XP", role: "institutional" },
+  { screen: "startup-quest",      icon: "🚀", title: "Startup Quest",      desc: "Registra tu startup, recibe aprobación y gana acceso con XP.", xp: "+1,000 XP", role: "startup" },
+  { screen: "agency-quest",       icon: "🔎", title: "Agency Quest",       desc: "Registra tu agencia, haz scouting y crea briefs para clientes.", xp: "+850 XP", role: "agency" },
+  { screen: "brand-quest",        icon: "🎯", title: "Brand Quest",        desc: "Registra tu marca, publica retos reales y solicita reuniones.", xp: "+900 XP", role: "brand" },
+  { screen: "media-quest",        icon: "📺", title: "Media Quest",        desc: "Regístrate como medio, acredítate y cubre AI4Brands.", xp: "+600 XP", role: "media" },
+  { screen: "university-quest",   icon: "🎓", title: "University Quest",   desc: "Conecta talento académico y forma equipo para el Prompt-a-thon.", xp: "+800 XP", role: "university" },
+  { screen: "investor-quest",     icon: "💰", title: "Investor Quest",     desc: "Descubre startups de IA con potencial de inversión.", xp: "+700 XP", role: "investor" },
+  { screen: "institutional-quest",icon: "🌐", title: "Institutional Quest",desc: "Registra tu ecosistema y activa tu comunidad de startups.", xp: "+1,200 XP", role: "institutional" },
+  { screen: "institutional-quest",icon: "🏗️", title: "Hub & Lab Quest",   desc: "Activa tu hub de innovación y conecta con el ecosistema.", xp: "+800 XP", role: "hub" },
 ];
 
 const roleHero: Record<Role, { title: string; desc: string; cta: string; ctaScreen: Screen }> = {
@@ -36,6 +40,30 @@ const roleHero: Record<Role, { title: string; desc: string; cta: string; ctaScre
     title: "Activa tu ecosistema de startups.",
     desc: "Registra tu organización, invita tu cohort y compite por el Ecosystem Champion Award.",
     cta: "Ir a Institutional Quest",
+    ctaScreen: "institutional-quest",
+  },
+  media: {
+    title: "Cubre la revolución de la IA en marketing.",
+    desc: "Acredítate como medio oficial de AI4Brands y crea contenido sobre el ecosistema.",
+    cta: "Ir a Media Quest",
+    ctaScreen: "media-quest",
+  },
+  university: {
+    title: "Conecta talento académico con la industria.",
+    desc: "Activa tus startups alumni, forma equipo para el Prompt-a-thon y conecta con empresas.",
+    cta: "Ir a University Quest",
+    ctaScreen: "university-quest",
+  },
+  investor: {
+    title: "Descubre las mejores startups de IA.",
+    desc: "Accede al directorio verificado de startups y agenda reuniones directas con fundadores.",
+    cta: "Ir a Investor Quest",
+    ctaScreen: "investor-quest",
+  },
+  hub: {
+    title: "Activa tu hub de innovación.",
+    desc: "Conecta tu comunidad de startups con marcas y agencias en el ecosistema AI4Brands.",
+    cta: "Ir a Hub Quest",
     ctaScreen: "institutional-quest",
   },
   curator: {
@@ -89,6 +117,27 @@ export function Home() {
 
   return (
     <div>
+      {/* ── Event Promo Banner ── */}
+      <div
+        onClick={() => go("event-page")}
+        className="rounded-[22px] border p-4 mb-4 cursor-pointer flex gap-4 items-center"
+        style={{ background: "linear-gradient(135deg,rgba(255,212,0,.18),rgba(68,215,255,.08))", border: "1px solid rgba(255,212,0,.3)" }}
+      >
+        <div className="w-[52px] h-[52px] rounded-[16px] bg-[#FFD400] grid place-items-center text-[#111] font-black text-center flex-none" style={{ lineHeight: 1 }}>
+          <div><div className="text-[22px] font-black">15</div><div className="text-[9px] uppercase">Dic</div></div>
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="font-black text-[14px] text-white truncate">AI4Brands 2026 · La Nave, Madrid</div>
+          <div className="text-[11px] text-[#A9B1CB] mt-0.5">Ponencias · Prompt-a-thon · Awards · Networking</div>
+          <div className="flex gap-1.5 mt-1.5 flex-wrap">
+            {["🎤 Expertos", "⚡ Prompt-a-thon", "🏆 Awards"].map(t => (
+              <span key={t} className="text-[9px] font-black px-2 py-0.5 rounded-full border border-[rgba(255,212,0,.3)] text-[#FFD400]">{t}</span>
+            ))}
+          </div>
+        </div>
+        <span className="text-[#FFD400] text-[18px] flex-none">→</span>
+      </div>
+
       {/* ── Hero ── */}
       <div
         className="rounded-[28px] border p-5 mb-4 relative overflow-hidden"

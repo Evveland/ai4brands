@@ -3,7 +3,7 @@ import { createServiceClient } from "@/lib/supabase/service";
 
 /* ─── Types ──────────────────────────────────────────────────────── */
 
-export type OrgType = "startup" | "agency" | "brand" | "institutional";
+export type OrgType = "startup" | "agency" | "brand" | "institutional" | "media" | "university" | "investor" | "hub";
 export type OrgStatus = "pending" | "approved" | "rejected";
 export type OrgRole = "owner" | "admin" | "member";
 

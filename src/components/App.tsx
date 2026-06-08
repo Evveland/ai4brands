@@ -10,6 +10,9 @@ import { StartupQuestPage } from "@/components/quest/StartupQuestPage";
 import { AgencyQuestPage } from "@/components/quest/AgencyQuestPage";
 import { BrandQuestPage } from "@/components/quest/BrandQuestPage";
 import { InstitutionalQuestPage } from "@/components/quest/InstitutionalQuestPage";
+import { MediaQuestPage } from "@/components/quest/MediaQuestPage";
+import { UniversityQuestPage } from "@/components/quest/UniversityQuestPage";
+import { InvestorQuestPage } from "@/components/quest/InvestorQuestPage";
 import { Scout } from "@/components/screens/Scout";
 import { Rankings } from "@/components/screens/Rankings";
 import { Rewards } from "@/components/screens/Rewards";
@@ -37,6 +40,7 @@ import {
 const INNER_SCREENS = new Set([
   "role-matrix", "role-database", "quest-profile", "capabilities-page",
   "startup-quest", "agency-quest", "brand-quest", "institutional-quest",
+  "media-quest", "university-quest", "investor-quest",
   "pilot-page", "invite-page", "challenge-detail", "challenge-response",
   "challenge-retail", "challenge-agency", "challenge-create", "startup-detail",
   "startup-ugc", "startup-match", "meeting-page", "agency-dashboard",
@@ -56,6 +60,9 @@ function ScreenRenderer() {
     case "startup-quest": return <StartupQuestPage />;
     case "agency-quest": return <AgencyQuestPage />;
     case "brand-quest": return <BrandQuestPage />;
+    case "media-quest": return <MediaQuestPage />;
+    case "university-quest": return <UniversityQuestPage />;
+    case "investor-quest": return <InvestorQuestPage />;
     case "institutional-quest": return <InstitutionalQuestPage />;
     case "quests":
     case "role-quest": return <Quests />;

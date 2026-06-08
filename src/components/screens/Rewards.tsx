@@ -82,35 +82,33 @@ export function Rewards() {
         <summary className="list-none cursor-pointer p-[14px] flex gap-3 items-center">
           <div className="min-w-[42px] h-[42px] rounded-[15px] grid place-items-center text-[20px] bg-[rgba(255,255,255,.08)]">🏆</div>
           <div className="flex-1">
-            <h4 className="m-0 mb-1 text-[14px] font-semibold">AI4Brands Awards</h4>
-            <p className="m-0 text-[var(--muted)] text-[12px]">Categorías basadas en los retos del challenge.</p>
+            <h4 className="m-0 mb-1 text-[14px] font-semibold">AI4Brands Awards 2026</h4>
+            <p className="m-0 text-[var(--muted)] text-[12px]">5 categorías · La Nave, Madrid · 15 Dic · 17:00–19:00h</p>
           </div>
           <div className="w-[28px] h-[28px] rounded-full grid place-items-center bg-[rgba(255,255,255,.07)] text-[#FFD400] font-black">⌄</div>
         </summary>
         <div className="p-[14px] border-t border-[rgba(255,255,255,.09)] grid gap-[10px]">
           {[
-            { screen: "award-content-ai" as const, type: "sponsor", typeLabel: "Award", title: "Best Content AI Pilot", desc: "Piloto medible para marcas.", votes: "312 votos", rec: "18 recomendaciones" },
-            { screen: "award-cx-ai" as const, type: "brand", typeLabel: "Award", title: "Best Customer Experience AI", desc: "Agentes, automatización o analítica para clientes.", votes: "284 votos", rec: "21 recomendaciones" },
-            { screen: "award-ecosystem" as const, type: "agency", typeLabel: "Award", title: "Ecosystem Activation Award", desc: "Hub con más oportunidades reales.", votes: "Ranking vivo", rec: "Startups + agencias" },
-          ].map((a) => {
-            const colors: Record<string, { bg: string; text: string }> = {
-              brand: { bg: "rgba(68,215,255,.14)", text: "#44D7FF" },
-              agency: { bg: "rgba(255,79,216,.14)", text: "#FF4FD8" },
-              sponsor: { bg: "rgba(255,212,0,.16)", text: "#FFD400" },
-            };
-            const c = colors[a.type];
-            return (
-              <Card key={a.title} clickable onClick={() => go(a.screen)} className="relative overflow-hidden">
-                <span className="inline-flex rounded-full px-[9px] py-[6px] text-[10px] font-black mb-[10px]" style={{ background: c.bg, color: c.text }}>{a.typeLabel}</span>
-                <h4 className="m-0 mb-1 text-[14px] font-semibold">{a.title}</h4>
-                <p className="m-0 text-[var(--muted)] text-[12px] leading-snug">{a.desc}</p>
-                <div className="flex gap-2 flex-wrap mt-2">
-                  <Badge variant="gold">{a.votes}</Badge>
-                  <Badge>{a.rec}</Badge>
-                </div>
-              </Card>
-            );
-          })}
+            { icon: "🏆", title: "Mejor Caso de Uso de IA en Marketing", desc: "El proyecto que mejor conecta IA con resultados reales de marketing.", color: "#FFD400" },
+            { icon: "🎨", title: "Creatividad + IA", desc: "La solución más creativa e innovadora usando IA generativa.", color: "#FF4FD8" },
+            { icon: "📊", title: "Mejor Estrategia Data-Driven con IA", desc: "Uso más efectivo de datos e IA para optimizar decisiones de marketing.", color: "#44D7FF" },
+            { icon: "⚡", title: "Premio Prompt-a-thon", desc: "El mejor equipo de la competición en directo con IA generativa.", color: "#4DFF9D" },
+            { icon: "🚀", title: "Mejor Startup AI4Brands", desc: "La startup con mayor potencial de impacto en la industria del marketing.", color: "#FFD400" },
+          ].map((a) => (
+            <Card key={a.title} clickable onClick={() => go("awards-vote")} className="flex gap-3 items-start">
+              <div className="w-[36px] h-[36px] rounded-[12px] grid place-items-center text-[18px] flex-none"
+                style={{ background: `${a.color}18` }}>{a.icon}</div>
+              <div>
+                <h4 className="m-0 mb-1 text-[13px] font-black" style={{ color: a.color }}>{a.title}</h4>
+                <p className="m-0 text-[var(--muted)] text-[11px] leading-snug">{a.desc}</p>
+              </div>
+            </Card>
+          ))}
+          <button onClick={() => go("awards-vote")}
+            className="w-full mt-1 rounded-[14px] py-2.5 font-black text-[13px] border-0 cursor-pointer"
+            style={{ background: "#FFD400", color: "#10131F" }}>
+            Votar ahora
+          </button>
         </div>
       </details>
 

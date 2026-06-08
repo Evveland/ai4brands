@@ -326,37 +326,123 @@ export function MeetingPage() {
 /* ─── Event Page ─── */
 export function EventPage() {
   const { go } = useNav();
+
+  const agenda = [
+    { time: "09:00 – 09:30", block: "Recepción",       format: "NETWORKING",    content: "Acreditaciones, café de bienvenida y primer espacio de networking." },
+    { time: "09:30 – 09:45", block: "Bienvenida",      format: "APERTURA",      content: "Presentación por Yellow Marketing y Spain AI." },
+    { time: "09:45 – 10:00", block: "Keynote inaugural",format: "PONENCIA",     content: "\"El presente de la IA en el marketing global\"" },
+    { time: "10:00 – 10:30", block: "Estrategia & Data",format: "PONENCIA",     content: "\"De los datos a la decisión: la nueva estrategia basada en IA\"" },
+    { time: "10:30 – 11:00", block: "Caso de uso",      format: "CASO DE ÉXITO",content: "Marca que utiliza IA en campañas de marketing." },
+    { time: "11:00 – 11:30", block: "Mesa redonda",     format: "DEBATE",       content: "\"Data + Creatividad = Futuro del marketing\"" },
+    { time: "11:45 – 12:15", block: "Coffee Break",     format: "NETWORKING",   content: "Descanso, networking y visita a stands de startups y partners." },
+    { time: "12:15 – 12:45", block: "Creatividad & IA", format: "PONENCIA",     content: "\"La creatividad aumentada: cómo la IA potencia las ideas\"" },
+    { time: "12:45 – 13:30", block: "Debate",           format: "MESA REDONDA", content: "\"¿Sustituye la IA al talento o lo amplifica?\"" },
+    { time: "13:30 – 14:00", block: "Tendencias 2026",  format: "PANEL",        content: "\"Tendencias en IA y marketing: lo que viene en 2026\"" },
+    { time: "14:00 – 16:00", block: "Cóctel",           format: "NETWORKING",   content: "Cóctel patrocinado y networking entre profesionales." },
+    { time: "16:00 – 17:00", block: "Prompt-a-thon",    format: "COMPETICIÓN",  content: "Presentación de soluciones del reto en directo con IA generativa." },
+    { time: "17:00 – 19:00", block: "AI4Brands Awards", format: "PREMIOS",      content: "Reconocimiento a las mejores soluciones de IA aplicadas al marketing." },
+    { time: "19:00 – 21:00", block: "Cierre",           format: "NETWORKING",   content: "Cóctel final y espacio de networking." },
+  ];
+
+  const formatColors: Record<string, string> = {
+    "NETWORKING": "#44D7FF", "APERTURA": "#FFD400", "PONENCIA": "#4DFF9D",
+    "CASO DE ÉXITO": "#FF4FD8", "DEBATE": "#FFD400", "MESA REDONDA": "#FF4FD8",
+    "PANEL": "#44D7FF", "COMPETICIÓN": "#FF5C7A", "PREMIOS": "#FFD400",
+  };
+
+  const players = [
+    { icon: "🚀", title: "Startups",       desc: "Presentan soluciones de IA para marketing." },
+    { icon: "🔎", title: "Agencias",        desc: "Scouts de innovación para sus clientes." },
+    { icon: "🎯", title: "Marcas",          desc: "Publican retos y seleccionan pilotos." },
+    { icon: "📺", title: "Medios",          desc: "Cobertura y difusión del ecosistema." },
+    { icon: "🎓", title: "Universidades",   desc: "Talento académico y equipos Prompt-a-thon." },
+    { icon: "💰", title: "Inversores",      desc: "Descubren startups con potencial." },
+    { icon: "🏗️", title: "Hubs & Labs",    desc: "Ecosistemas de innovación activos." },
+    { icon: "🌐", title: "Instituciones",   desc: "Aceleradoras e incubadoras." },
+  ];
+
   return (
     <div>
-      <BackBar title="AI4Brands 2026" subtitle="Evento creado por Yellow" />
-      <div className="rounded-[28px] border p-5 mb-4 relative overflow-hidden" style={{ background: "linear-gradient(145deg,rgba(255,212,0,.14),rgba(68,215,255,.08) 45%,rgba(255,79,216,.09))", border: "1px solid rgba(255,255,255,.09)", boxShadow: "0 18px 60px rgba(0,0,0,.35)" }}>
-        <small className="text-[#FFD400] font-black uppercase tracking-widest text-[11px]">Innovation League</small>
-        <h2 className="text-[27px] font-black tracking-tight leading-none mt-2 mb-2">IA aplicada a marcas.</h2>
-        <p className="m-0 text-[#DCE3FF] text-[13px] leading-relaxed">Un evento creado por Yellow para conectar startups de IA, agencias de marketing y grandes marcas.</p>
+      <BackBar title="AI4Brands 2026" subtitle="Madrid · La Nave · 15 Diciembre" />
+
+      {/* Hero */}
+      <div className="rounded-[28px] border p-5 mb-4 relative overflow-hidden"
+        style={{ background: "linear-gradient(145deg,rgba(255,212,0,.14),rgba(68,215,255,.08) 45%,rgba(255,79,216,.09))", border: "1px solid rgba(255,255,255,.09)", boxShadow: "0 18px 60px rgba(0,0,0,.35)" }}>
+        <div className="absolute -right-10 -top-10 w-[140px] h-[140px] rounded-full pointer-events-none" style={{ background: "rgba(255,212,0,.22)", filter: "blur(2px)" }} />
+        <small className="text-[#FFD400] font-black uppercase tracking-widest text-[11px]">AI4Brands Innovation League</small>
+        <h2 className="text-[26px] font-black tracking-tight leading-tight mt-2 mb-2">La plataforma que conecta la IA con la industria del marketing.</h2>
+        <p className="m-0 text-[#DCE3FF] text-[13px] leading-relaxed">
+          Ponencias, debates, talleres, Prompt-a-thon y AI4Brands Awards. El punto de encuentro donde la IA y el marketing conversan.
+        </p>
         <div className="flex gap-2 flex-wrap mt-3">
-          {["🎟️ Startup Quest", "🌐 Ecosystem Challenge", "🎯 Brand Challenges"].map(p => (
+          {["📍 La Nave, Madrid", "📅 15 Dic 2026", "🏆 Awards", "⚡ Prompt-a-thon"].map(p => (
             <span key={p} className="border border-[rgba(255,255,255,.09)] bg-[rgba(255,255,255,.07)] rounded-full px-[10px] py-[8px] text-[11px] font-black text-[#EAF0FF]">{p}</span>
           ))}
         </div>
       </div>
+
+      {/* Formats */}
       <div className="flex items-end justify-between mx-0.5 mb-[10px]">
-        <h3 className="m-0 text-[17px] font-bold tracking-tight">Participantes</h3>
+        <h3 className="m-0 text-[17px] font-bold tracking-tight">Formatos del evento</h3>
       </div>
-      <div className="grid gap-[10px] mb-4">
+      <div className="grid gap-[8px] mb-5" style={{ gridTemplateColumns: "1fr 1fr" }}>
         {[
-          { icon: "🚀", title: "Startups", desc: "Presentan soluciones y pilotos." },
-          { icon: "🏢", title: "Agencias", desc: "Actúan como scouts para sus clientes." },
-          { icon: "🎯", title: "Marcas", desc: "Publican retos y seleccionan propuestas." },
-          { icon: "🌐", title: "Ecosistemas", desc: "Movilizan a sus comunidades." },
-        ].map(p => (
-          <Card key={p.title} className="flex gap-3 items-center">
-            <div className="min-w-[42px] h-[42px] rounded-[15px] grid place-items-center text-[20px] bg-[rgba(255,255,255,.08)]">{p.icon}</div>
-            <div><h4 className="m-0 mb-1 text-[14px] font-semibold">{p.title}</h4><p className="m-0 text-[var(--muted)] text-[12px]">{p.desc}</p></div>
-          </Card>
+          { icon: "🎤", title: "Ponencias", desc: "Expertos nacionales e internacionales." },
+          { icon: "💬", title: "Debates", desc: "Líderes analizan retos y oportunidades." },
+          { icon: "🛠️", title: "Talleres", desc: "Experimenta con herramientas de IA." },
+          { icon: "⚡", title: "Prompt-a-thon", desc: "Competición en directo con IA generativa." },
+          { icon: "🤝", title: "Networking", desc: "Conexiones entre profesionales y startups." },
+          { icon: "🏆", title: "Awards", desc: "Reconocimiento a los mejores proyectos." },
+        ].map(f => (
+          <div key={f.title} className="rounded-[16px] border p-3" style={{ background: "rgba(23,29,52,.85)", border: "1px solid rgba(255,255,255,.08)" }}>
+            <div className="text-[18px] mb-1">{f.icon}</div>
+            <div className="font-black text-[13px] text-white">{f.title}</div>
+            <div className="text-[11px] text-[#737D9D] mt-0.5">{f.desc}</div>
+          </div>
         ))}
       </div>
-      <Button full onClick={() => go("ecosystem-challenge")}>Ver reto colectivo</Button>
-      <Button full variant="secondary" onClick={() => go("access-flow")}>Ver acceso</Button>
+
+      {/* Agenda */}
+      <div className="flex items-end justify-between mx-0.5 mb-[10px]">
+        <h3 className="m-0 text-[17px] font-bold tracking-tight">Agenda del día</h3>
+        <span className="text-[11px] text-[#737D9D]">15 Dic · La Nave</span>
+      </div>
+      <div className="rounded-[18px] border overflow-hidden mb-5" style={{ border: "1px solid rgba(255,255,255,.08)", background: "rgba(23,29,52,.85)" }}>
+        {agenda.map((item, i) => (
+          <div key={i} className={`flex gap-3 px-4 py-3 ${i < agenda.length - 1 ? "border-b border-[rgba(255,255,255,.06)]" : ""}`}>
+            <div className="text-[11px] text-[#737D9D] font-mono whitespace-nowrap pt-0.5 w-[90px] flex-none">{item.time}</div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                <span className="font-black text-[12px] text-white">{item.block}</span>
+                <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full"
+                  style={{ background: `${formatColors[item.format] ?? "#737D9D"}18`, color: formatColors[item.format] ?? "#737D9D" }}>
+                  {item.format}
+                </span>
+              </div>
+              <p className="text-[11px] text-[#A9B1CB] m-0 leading-snug">{item.content}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Players */}
+      <div className="flex items-end justify-between mx-0.5 mb-[10px]">
+        <h3 className="m-0 text-[17px] font-bold tracking-tight">El ecosistema</h3>
+      </div>
+      <div className="grid gap-[8px] mb-4" style={{ gridTemplateColumns: "1fr 1fr" }}>
+        {players.map(p => (
+          <div key={p.title} className="rounded-[16px] border p-3 flex gap-2 items-start" style={{ background: "rgba(23,29,52,.85)", border: "1px solid rgba(255,255,255,.08)" }}>
+            <span className="text-[18px] flex-none">{p.icon}</span>
+            <div>
+              <div className="font-black text-[12px] text-white">{p.title}</div>
+              <div className="text-[10px] text-[#737D9D] mt-0.5">{p.desc}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <Button full onClick={() => go("awards-vote")}>Ver AI4Brands Awards</Button>
+      <Button full variant="secondary" onClick={() => go("access-flow")}>Obtener acceso</Button>
     </div>
   );
 }
@@ -690,42 +776,60 @@ export function AgencyDashboard() {
 }
 
 /* ─── Awards Vote ─── */
+
+const AWARD_CATEGORIES = [
+  { id: "mejor-caso-uso", name: "🏆 Mejor Caso de Uso de IA en Marketing", desc: "El proyecto que mejor conecta IA con resultados reales de marketing." },
+  { id: "creatividad-ia", name: "🎨 Creatividad + IA", desc: "La solución más creativa e innovadora usando IA generativa." },
+  { id: "estrategia-data", name: "📊 Mejor Estrategia Data-Driven con IA", desc: "Uso más efectivo de datos e IA para optimizar decisiones de marketing." },
+  { id: "prompt-a-thon", name: "⚡ Premio Prompt-a-thon", desc: "El mejor equipo de la competición en directo del evento." },
+  { id: "mejor-startup", name: "🚀 Mejor Startup AI4Brands", desc: "La startup con mayor potencial de impacto en la industria del marketing." },
+];
+
 export function AwardsVote() {
   const dbUser = useDBUser();
-  const [category, setCategory] = useState("Best Content AI Pilot");
-  const [finalist, setFinalist] = useState("UGC Forge");
+  const [category, setCategory] = useState(AWARD_CATEGORIES[0].id);
   const [reason, setReason] = useState("");
   const [sent, setSent] = useState(false);
+
+  const selectedCat = AWARD_CATEGORIES.find(c => c.id === category);
 
   async function handleVote(e: React.FormEvent) {
     e.preventDefault();
     if (dbUser?.id) {
-      await submitVote({ voter_id: dbUser.id, category, reason });
+      await submitVote({ voter_id: dbUser.id, category: selectedCat?.name ?? category, reason });
     }
     setSent(true);
   }
 
   return (
     <div>
-      <BackBar title="Votar Awards" subtitle="Un voto por categoría" />
+      <BackBar title="AI4Brands Awards" subtitle="Un voto por categoría · 17:00–19:00h" />
+
+      {/* Award categories overview */}
+      <div className="grid gap-[8px] mb-4">
+        {AWARD_CATEGORIES.map(a => (
+          <div key={a.id}
+            onClick={() => { setCategory(a.id); setSent(false); }}
+            className="rounded-[18px] border p-4 cursor-pointer transition-all"
+            style={{
+              background: category === a.id ? "rgba(255,212,0,.1)" : "rgba(23,29,52,.85)",
+              border: `1px solid ${category === a.id ? "rgba(255,212,0,.5)" : "rgba(255,255,255,.08)"}`,
+            }}>
+            <div className="font-black text-[13px] text-white">{a.name}</div>
+            <div className="text-[11px] text-[#737D9D] mt-0.5">{a.desc}</div>
+          </div>
+        ))}
+      </div>
+
       <Card>
+        <div className="text-[12px] font-black text-white mb-3">
+          Votar: {selectedCat?.name}
+        </div>
         <form onSubmit={handleVote}>
-          <Field label="Categoría">
-            <select className={inputCls} value={category} onChange={e => setCategory(e.target.value)}>
-              <option>Best Content AI Pilot</option>
-              <option>Best Customer Experience AI</option>
-              <option>Best Data & Insights Solution</option>
-              <option>Best Loyalty & Gamification AI</option>
-              <option>Ecosystem Activation Award</option>
-            </select>
-          </Field>
-          <Field label="Finalista">
-            <select className={inputCls} value={finalist} onChange={e => setFinalist(e.target.value)}>
-              <option>UGC Forge</option><option>CXFlow AI</option><option>RetailBot Lab</option><option>AdCopy OS</option>
-            </select>
-          </Field>
-          <Field label="Motivo del voto">
-            <textarea className={`${inputCls} min-h-[82px] resize-y`} placeholder="¿Por qué debería ganar?" value={reason} onChange={e => setReason(e.target.value)} />
+          <Field label="¿Por qué debería ganar esta categoría?">
+            <textarea className={`${inputCls} min-h-[82px] resize-y`}
+              placeholder="Explica el impacto, innovación o resultados que justifican el premio…"
+              value={reason} onChange={e => setReason(e.target.value)} />
           </Field>
           <button type="submit" disabled={sent} className="w-full mt-3 rounded-[16px] py-3 font-black text-[14px] border-0 cursor-pointer transition-all"
             style={{ background: sent ? "rgba(77,255,157,.2)" : "#FFD400", color: sent ? "#4DFF9D" : "#10131F", boxShadow: sent ? "none" : "0 10px 25px rgba(255,212,0,.22)" }}>
@@ -733,7 +837,9 @@ export function AwardsVote() {
           </button>
         </form>
       </Card>
-      <p className="text-center text-[var(--soft)] text-[11px] my-[18px]">Los votos públicos suman al ranking; el jurado valida elegibilidad y selecciona ganadores.</p>
+      <p className="text-center text-[var(--soft)] text-[11px] my-[18px]">
+        Los votos públicos suman al ranking. El jurado de AI4Brands valida y selecciona los ganadores en el evento.
+      </p>
     </div>
   );
 }

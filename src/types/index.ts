@@ -1,4 +1,4 @@
-export type Role = "startup" | "agency" | "brand" | "institutional" | "curator";
+export type Role = "startup" | "agency" | "brand" | "institutional" | "curator" | "media" | "university" | "investor" | "hub";
 
 export interface User {
   id: string;
@@ -103,6 +103,9 @@ export type Screen =
   | "startup-quest"
   | "agency-quest"
   | "brand-quest"
+  | "media-quest"
+  | "university-quest"
+  | "investor-quest"
   | "institutional-quest"
   | "agency-quest-page"
   | "brand-quest-page"
