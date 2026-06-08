@@ -1,9 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useNav } from "@/lib/store";
+import { useNav, useAppState } from "@/lib/store";
 import { Card } from "@/components/ui/Card";
 import { fetchChallenges } from "@/lib/db";
+import type { Role } from "@/types";
+
+// Which challenge types each role can RESPOND to (not just view)
+const ROLE_CAN_RESPOND: Record<Role, string[]> = {
+  startup:      ["brand", "sponsor", "ecosystem"],
+  agency:       ["brand", "agency", "ecosystem"],
+  brand:        ["sponsor", "ecosystem"],
+  media:        ["ecosystem"],
+  university:   ["sponsor", "ecosystem"],
+  investor:     ["ecosystem"],
+  hub:          ["ecosystem"],
+  institutional:["ecosystem"],
+  curator:      ["brand", "agency", "sponsor", "ecosystem"],
+};
 
 type Challenge = {
   id: string;
@@ -50,6 +64,7 @@ const verticals = [
 
 export function Challenges() {
   const { go } = useNav();
+  const { role } = useAppState();
   const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -60,13 +75,24 @@ export function Challenges() {
     });
   }, []);
 
+  // Filter challenges to ones this role can interact with
+  const allowedTypes = role ? ROLE_CAN_RESPOND[role] : ["brand","agency","sponsor","ecosystem"];
+  const visibleChallenges = challenges.filter(c => allowedTypes.includes(c.type));
+
+  // Brands and agencies can create challenges; others just respond
+  const canCreate = !role || role === "brand" || role === "agency" || role === "curator";
+
   return (
     <div>
       <div className="flex items-end justify-between mx-0.5 mt-[18px] mb-[10px]">
-        <h3 className="m-0 text-[17px] font-bold tracking-tight">Brand Challenges</h3>
-        <button onClick={() => go("challenge-create")} className="text-[#FFD400] text-[12px] font-bold cursor-pointer bg-transparent border-0">
-          Publicar reto
-        </button>
+        <h3 className="m-0 text-[17px] font-bold tracking-tight">
+          {role === "agency" ? "Brand Challenges & Briefs" : "Challenges activos"}
+        </h3>
+        {canCreate && (
+          <button onClick={() => go("challenge-create")} className="text-[#FFD400] text-[12px] font-bold cursor-pointer bg-transparent border-0">
+            Publicar reto
+          </button>
+        )}
       </div>
 
       {loading ? (
@@ -77,12 +103,12 @@ export function Challenges() {
         </div>
       ) : (
         <div className="grid gap-[10px] mb-4">
-          {challenges.length === 0 && (
+          {visibleChallenges.length === 0 && (
             <div className="rounded-[22px] border border-[rgba(255,255,255,.09)] p-5 text-center" style={{ background: "rgba(23,29,52,.86)" }}>
-              <p className="text-[var(--muted)] text-[13px] m-0">Sin challenges activos.</p>
+              <p className="text-[var(--muted)] text-[13px] m-0">Sin challenges disponibles para tu rol.</p>
             </div>
           )}
-          {challenges.map((c) => {
+          {visibleChallenges.map((c) => {
             const colors = pillColors[c.type] ?? pillColors.brand;
             const labels = actionLabels[c.type] ?? ["Ver", "Participar"];
             const targetScreen = screenMap[c.type] ?? "challenge-detail";

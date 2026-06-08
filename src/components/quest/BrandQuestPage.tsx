@@ -83,7 +83,7 @@ export function BrandQuestPage() {
   return (
     <div>
       <BackBar title={org?.name ?? "Brand Quest"} subtitle={`${org?.sector ?? "Marca"} · ${org?.role_in_org === "owner" ? "Responsable" : "Miembro"}`} />
-      <StatusBanner status={org?.status ?? "pending"} reason={org?.rejection_reason} />
+      <StatusBanner status={org?.status ?? "pending"} reason={org?.rejection_reason} onRefresh={reload} />
       {org?.invite_code && <InviteCard code={org.invite_code} />}
       <div className="rounded-[18px] border p-4 mb-4" style={{ background: "rgba(23,29,52,.85)", border: "1px solid rgba(255,255,255,.08)" }}>
         <div className="text-[13px] font-black text-white mb-2">Perfil de la marca</div>

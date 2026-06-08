@@ -99,7 +99,7 @@ export function StartupQuestPage() {
     <div>
       <BackBar title={org?.name ?? "Startup Quest"} subtitle={`${org?.vertical ?? "Startup"} · ${org?.role_in_org === "owner" ? "Responsable" : "Miembro"}`} />
 
-      <StatusBanner status={org?.status ?? "pending"} reason={org?.rejection_reason} />
+      <StatusBanner status={org?.status ?? "pending"} reason={org?.rejection_reason} onRefresh={reload} />
 
       {org?.invite_code && <InviteCard code={org.invite_code} />}
 

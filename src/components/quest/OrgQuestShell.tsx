@@ -2,10 +2,20 @@
 
 import { useState, useEffect } from "react";
 import { useDBUser } from "@/components/UserProvider";
+import { useAppState } from "@/lib/store";
 import { getUserOrg, joinOrgByCode, type Organization, type OrgRole } from "@/lib/db/orgs";
 
 /* ─── Status banner ──────────────────────────────────────────────── */
-function StatusBanner({ status, reason }: { status: string; reason?: string | null }) {
+function StatusBanner({ status, reason, onRefresh }: { status: string; reason?: string | null; onRefresh?: () => void }) {
+  const [checking, setChecking] = useState(false);
+
+  async function handleRefresh() {
+    if (!onRefresh) return;
+    setChecking(true);
+    await onRefresh();
+    setChecking(false);
+  }
+
   const cfg = {
     pending: {
       bg: "rgba(255,212,0,.12)", border: "rgba(255,212,0,.3)", color: "#FFD400",
@@ -27,13 +37,25 @@ function StatusBanner({ status, reason }: { status: string; reason?: string | nu
   if (!cfg) return null;
 
   return (
-    <div className="rounded-[18px] border p-4 mb-4 flex gap-3 items-start"
+    <div className="rounded-[18px] border p-4 mb-4"
       style={{ background: cfg.bg, border: `1px solid ${cfg.border}` }}>
-      <span className="text-[22px] flex-none">{cfg.icon}</span>
-      <div>
-        <div className="font-black text-[14px] mb-1" style={{ color: cfg.color }}>{cfg.text}</div>
-        <p className="text-[12px] m-0" style={{ color: "#DCE3FF" }}>{cfg.sub}</p>
+      <div className="flex gap-3 items-start">
+        <span className="text-[22px] flex-none">{cfg.icon}</span>
+        <div className="flex-1">
+          <div className="font-black text-[14px] mb-1" style={{ color: cfg.color }}>{cfg.text}</div>
+          <p className="text-[12px] m-0" style={{ color: "#DCE3FF" }}>{cfg.sub}</p>
+        </div>
       </div>
+      {status === "pending" && onRefresh && (
+        <button
+          onClick={handleRefresh}
+          disabled={checking}
+          className="w-full mt-3 rounded-[12px] py-2 text-[12px] font-black cursor-pointer border-0 transition-all"
+          style={{ background: "rgba(255,212,0,.2)", color: "#FFD400" }}
+        >
+          {checking ? "Verificando…" : "🔄 Verificar estado de aprobación"}
+        </button>
+      )}
     </div>
   );
 }
@@ -142,6 +164,7 @@ export function MembersList({ members }: { members: any[] }) {
 
 export function useOrgQuest() {
   const dbUser = useDBUser();
+  const { screen } = useAppState();
   const [org, setOrg] = useState<(Organization & { role_in_org: OrgRole }) | null>(null);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<"loading" | "no-org" | "create" | "join" | "quest">("loading");
@@ -155,7 +178,11 @@ export function useOrgQuest() {
     setLoading(false);
   }
 
-  useEffect(() => { reload(); }, [dbUser?.id]);
+  // Re-fetch every time the user navigates to a quest screen
+  useEffect(() => {
+    reload();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dbUser?.id, screen]);
 
   return { org, loading, view, setView, reload, dbUser };
 }
