@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { updateUser, sendTelegramMessage } from "@/lib/supabase/user-actions";
 
 const inputCls = "w-full rounded-[10px] border border-[rgba(255,255,255,.1)] bg-[rgba(255,255,255,.06)] px-3 py-2 text-[12px] text-white outline-none focus:border-[rgba(255,212,0,.4)] transition-colors font-sans";
@@ -21,7 +22,7 @@ const roleColors: Record<string, { bg: string; text: string }> = {
   curator:      { bg: "rgba(255,92,122,.15)", text: "#FF5C7A" },
 };
 
-export function UserRow({ user }: { user: any }) {
+export function UserRow({ user, detailUrl }: { user: any; detailUrl?: string }) {
   const [tab, setTab] = useState<"edit" | "message" | null>(null);
   const [msgSent, setMsgSent] = useState(false);
   const [msgError, setMsgError] = useState("");
@@ -69,7 +70,14 @@ export function UserRow({ user }: { user: any }) {
         </td>
         {/* Actions */}
         <td className="px-4 py-3">
-          <div className="flex gap-1.5">
+          <div className="flex gap-1.5 flex-wrap">
+            {detailUrl && (
+              <Link href={detailUrl}
+                className="rounded-[8px] px-2.5 py-1 text-[10px] font-black cursor-pointer no-underline"
+                style={{ background: "rgba(255,255,255,.08)", color: "#A9B1CB" }}>
+                👤 Ver
+              </Link>
+            )}
             <button onClick={() => setTab(tab === "edit" ? null : "edit")}
               className="rounded-[8px] px-2.5 py-1 text-[10px] font-black cursor-pointer border-0 transition-colors"
               style={{ background: tab === "edit" ? "rgba(255,212,0,.25)" : "rgba(255,212,0,.12)", color: "#FFD400" }}>
