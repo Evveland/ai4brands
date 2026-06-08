@@ -1,19 +1,44 @@
 "use client";
 
 import { useAppState, useNav } from "@/lib/store";
-import type { Screen } from "@/types";
+import type { Screen, Role } from "@/types";
 
-const navItems: { icon: string; label: string; screen: Screen }[] = [
-  { icon: "🏠", label: "Home", screen: "home" },
-  { icon: "🚀", label: "Quest", screen: "quests" },
-  { icon: "🎯", label: "Retos", screen: "challenges" },
-  { icon: "🔎", label: "Scout", screen: "scout" },
-  { icon: "🏆", label: "Trofeos", screen: "rewards" },
-];
+// Quest screens that belong to each role
+const QUEST_SCREENS: Record<Role, Screen> = {
+  startup:      "startup-quest",
+  agency:       "agency-quest",
+  brand:        "brand-quest",
+  media:        "media-quest",
+  university:   "university-quest",
+  investor:     "investor-quest",
+  institutional:"institutional-quest",
+  hub:          "institutional-quest",
+  curator:      "challenges",
+};
+
+// All quest-related screens (so the Quest tab stays highlighted on any of them)
+const QUEST_FAMILY = new Set<Screen>([
+  "quests", "role-quest",
+  "startup-quest", "agency-quest", "brand-quest",
+  "media-quest", "university-quest", "investor-quest", "institutional-quest",
+  "profile-page", "capabilities-page", "pilot-page", "promotion-page", "challenge-page",
+  "agency-quest-page", "brand-quest-page", "institutional-quest-page",
+]);
 
 export function BottomNav() {
-  const { screen } = useAppState();
+  const { screen, role } = useAppState();
   const { go } = useNav();
+
+  // Quest tab destination depends on selected role
+  const questScreen: Screen = role ? QUEST_SCREENS[role] : "quests";
+
+  const navItems: { icon: string; label: string; screen: Screen; key: string }[] = [
+    { icon: "🏠", label: "Home",    screen: "home",       key: "home" },
+    { icon: "🚀", label: "Quest",   screen: questScreen,  key: "quest" },
+    { icon: "🎯", label: "Retos",   screen: "challenges", key: "challenges" },
+    { icon: "🔎", label: "Scout",   screen: "scout",      key: "scout" },
+    { icon: "🏆", label: "Trofeos", screen: "rewards",    key: "rewards" },
+  ];
 
   return (
     <nav
@@ -28,10 +53,14 @@ export function BottomNav() {
       }}
     >
       {navItems.map((item) => {
-        const active = item.screen === screen;
+        const active =
+          item.key === "quest"
+            ? QUEST_FAMILY.has(screen)
+            : item.screen === screen;
+
         return (
           <button
-            key={item.screen}
+            key={item.key}
             onClick={() => go(item.screen)}
             className="border-0 text-[10px] font-bold px-1 py-2 rounded-[16px] cursor-pointer transition-colors"
             style={{
