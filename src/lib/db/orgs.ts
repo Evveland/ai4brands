@@ -31,6 +31,7 @@ export interface Organization {
   rejection_reason: string | null;
   xp: number;
   badges: string[];
+  completed_steps: string[];
   created_at: string;
   updated_at: string;
 }

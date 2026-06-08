@@ -60,10 +60,10 @@ function CreateAgencyForm({ userId, onCreated }: { userId: string; onCreated: ()
 }
 
 const steps = [
-  { icon: "🔎", title: "Scout de startups", desc: "Busca y guarda startups por vertical y necesidad de cliente.", xp: "+200 XP", screen: "scout" as const },
-  { icon: "⭐", title: "Recomienda una startup", desc: "Recomendaciones con criterio y justificación.", xp: "+250 XP", screen: "awards-recommend" as const },
-  { icon: "🧾", title: "Crea un brief", desc: "Convierte una necesidad de cliente en challenge.", xp: "+300 XP", screen: "challenge-create" as const },
-  { icon: "🤝", title: "Genera una reunión", desc: "Conecta una startup con tu cliente.", xp: "+500 XP", screen: "meeting-page" as const },
+  { id: "agency-scout",     icon: "🔎", title: "Scout de startups",     desc: "Busca y guarda startups por vertical y necesidad de cliente.", xp: "+200 XP", screen: "step-a1" as const },
+  { id: "agency-recommend", icon: "⭐", title: "Recomienda una startup", desc: "Recomendaciones con criterio y justificación.", xp: "+250 XP", screen: "step-a2" as const },
+  { id: "agency-brief",     icon: "🧾", title: "Crea un brief",          desc: "Convierte una necesidad de cliente en challenge.", xp: "+300 XP", screen: "step-a3" as const },
+  { id: "agency-meeting",   icon: "🤝", title: "Genera una reunión",     desc: "Conecta una startup con tu cliente.", xp: "+500 XP", screen: "step-a4" as const },
 ];
 
 export function AgencyQuestPage() {
@@ -102,15 +102,17 @@ export function AgencyQuestPage() {
         <span className="text-[12px] text-[#737D9D]">{approved ? "Activo" : "Pendiente aprobación"}</span>
       </div>
       <div className="grid gap-[10px]">
-        {steps.map(s => (
+        {steps.map(s => { const stepDone = (org?.completed_steps ?? []).includes(s.id ?? ""); return (
           <div key={s.screen} onClick={() => approved && go(s.screen)}
             className="rounded-[22px] border p-[14px] flex gap-3 items-center"
-            style={{ background: "rgba(23,29,52,.86)", border: "1px solid rgba(255,255,255,.09)", cursor: approved ? "pointer" : "default", opacity: approved ? 1 : 0.45 }}>
+            style={{ background: stepDone ? "rgba(77,255,157,.07)" : "rgba(23,29,52,.86)", border: stepDone ? "1px solid rgba(77,255,157,.25)" : "1px solid rgba(255,255,255,.09)", cursor: approved ? "pointer" : "default", opacity: approved ? 1 : 0.45 }}>
             <div className="min-w-[42px] h-[42px] rounded-[15px] grid place-items-center text-[20px] bg-[rgba(255,255,255,.08)]">{s.icon}</div>
             <div className="flex-1"><h4 className="m-0 mb-1 text-[14px] font-semibold">{s.title}</h4><p className="m-0 text-[var(--muted)] text-[12px]">{s.desc}</p></div>
-            <div className="text-[#FFD400] font-black text-[12px] whitespace-nowrap">{s.xp}</div>
+            <div className="font-black text-[12px] whitespace-nowrap" style={{ color: stepDone ? "#4DFF9D" : "#FFD400" }}>
+              {stepDone ? "Hecho" : s.xp}
+            </div>
           </div>
-        ))}
+        ); })}
       </div>
     </div>
   );

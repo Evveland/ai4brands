@@ -59,11 +59,11 @@ function CreateStartupForm({ userId, onCreated }: { userId: string; onCreated: (
 }
 
 const steps = [
-  { icon: "🧾", title: "Ficha básica", desc: "Nombre, vertical, pitch y cliente ideal.", xp: "+220 XP", screen: "profile-page" as const },
-  { icon: "🧠", title: "Mapa de capacidades IA", desc: "Selecciona en qué tecnologías eres fuerte.", xp: "+120 XP", screen: "capabilities-page" as const },
-  { icon: "🎯", title: "Propuesta 30/60/90", desc: "Define tu piloto para una gran marca.", xp: "+300 XP", screen: "pilot-page" as const },
-  { icon: "📣", title: "Promoción", desc: "Invita actores clave y comparte con trazabilidad.", xp: "+400 XP", screen: "promotion-page" as const },
-  { icon: "🏆", title: "Responde un Brand Challenge", desc: "Participa en un reto de sponsor, agencia o marca.", xp: "+500 XP", screen: "challenge-page" as const },
+  { id: "startup-profile",      icon: "🧾", title: "Ficha básica",            desc: "Nombre, vertical, pitch y cliente ideal.", xp: "+220 XP", screen: "step-s1" as const },
+  { id: "startup-capabilities", icon: "🧠", title: "Mapa de capacidades IA",  desc: "Selecciona en qué tecnologías eres fuerte.", xp: "+120 XP", screen: "step-s2" as const },
+  { id: "startup-pilot",        icon: "🎯", title: "Propuesta 30/60/90",      desc: "Define tu piloto para una gran marca.", xp: "+300 XP", screen: "step-s3" as const },
+  { id: "startup-promotion",    icon: "📣", title: "Promoción",               desc: "Invita actores clave y comparte con trazabilidad.", xp: "+400 XP", screen: "step-s4" as const },
+  { id: "startup-challenge",    icon: "🏆", title: "Responde un Brand Challenge", desc: "Participa en un reto de sponsor, agencia o marca.", xp: "+500 XP", screen: "step-s5" as const },
 ];
 
 export function StartupQuestPage() {
@@ -136,26 +136,33 @@ export function StartupQuestPage() {
       </div>
 
       <div className="grid gap-[10px]">
-        {steps.map((s) => (
-          <div
-            key={s.screen}
-            onClick={() => approved && go(s.screen)}
-            className="rounded-[22px] border p-[14px] flex gap-3 items-center transition-all"
-            style={{
-              background: "rgba(23,29,52,.86)",
-              border: "1px solid rgba(255,255,255,.09)",
-              cursor: approved ? "pointer" : "default",
-              opacity: approved ? 1 : 0.45,
-              filter: approved ? "none" : "grayscale(0.3)",
-            }}>
-            <div className="min-w-[42px] h-[42px] rounded-[15px] grid place-items-center text-[20px] bg-[rgba(255,255,255,.08)]">{s.icon}</div>
-            <div className="flex-1">
-              <h4 className="m-0 mb-1 text-[14px] font-semibold">{s.title}</h4>
-              <p className="m-0 text-[var(--muted)] text-[12px]">{s.desc}</p>
+        {steps.map((s) => {
+          const stepDone = (org?.completed_steps ?? []).includes(s.id);
+          return (
+            <div
+              key={s.screen}
+              onClick={() => approved && go(s.screen)}
+              className="rounded-[22px] border p-[14px] flex gap-3 items-center transition-all"
+              style={{
+                background: stepDone ? "rgba(77,255,157,.07)" : "rgba(23,29,52,.86)",
+                border: stepDone ? "1px solid rgba(77,255,157,.25)" : "1px solid rgba(255,255,255,.09)",
+                cursor: approved ? "pointer" : "default",
+                opacity: approved ? 1 : 0.45,
+              }}>
+              <div className="min-w-[42px] h-[42px] rounded-[15px] grid place-items-center text-[20px]"
+                style={{ background: stepDone ? "rgba(77,255,157,.2)" : "rgba(255,255,255,.08)" }}>
+                {stepDone ? "✓" : s.icon}
+              </div>
+              <div className="flex-1">
+                <h4 className="m-0 mb-1 text-[14px] font-semibold" style={{ color: stepDone ? "#4DFF9D" : "white" }}>{s.title}</h4>
+                <p className="m-0 text-[var(--muted)] text-[12px]">{s.desc}</p>
+              </div>
+              <div className="font-black text-[12px] whitespace-nowrap" style={{ color: stepDone ? "#4DFF9D" : "#FFD400" }}>
+                {stepDone ? "Hecho" : s.xp}
+              </div>
             </div>
-            <div className="text-[#FFD400] font-black text-[12px] whitespace-nowrap">{s.xp}</div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

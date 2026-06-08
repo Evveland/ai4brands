@@ -7,6 +7,13 @@ import { TelegramInit } from "@/components/TelegramInit";
 import { Home } from "@/components/screens/Home";
 import { Challenges } from "@/components/screens/Challenges";
 import { StartupQuestPage } from "@/components/quest/StartupQuestPage";
+import { Step1BasicProfile } from "@/components/steps/startup/Step1BasicProfile";
+import { Step2Capabilities } from "@/components/steps/startup/Step2Capabilities";
+import { Step3Pilot } from "@/components/steps/startup/Step3Pilot";
+import { Step4Promotion } from "@/components/steps/startup/Step4Promotion";
+import { Step5Challenge } from "@/components/steps/startup/Step5Challenge";
+import { AgencyStep1Scout, AgencyStep2Recommend, AgencyStep3Brief, AgencyStep4Meeting } from "@/components/steps/agency/AgencySteps";
+import { BrandStep1Challenge, BrandStep2Vote, BrandStep3Meeting } from "@/components/steps/brand/BrandSteps";
 import { AgencyQuestPage } from "@/components/quest/AgencyQuestPage";
 import { BrandQuestPage } from "@/components/quest/BrandQuestPage";
 import { InstitutionalQuestPage } from "@/components/quest/InstitutionalQuestPage";
@@ -41,6 +48,9 @@ const INNER_SCREENS = new Set([
   "role-matrix", "role-database", "quest-profile", "capabilities-page",
   "startup-quest", "agency-quest", "brand-quest", "institutional-quest",
   "media-quest", "university-quest", "investor-quest",
+  "step-s1","step-s2","step-s3","step-s4","step-s5",
+  "step-a1","step-a2","step-a3","step-a4",
+  "step-b1","step-b2","step-b3",
   "pilot-page", "invite-page", "challenge-detail", "challenge-response",
   "challenge-retail", "challenge-agency", "challenge-create", "startup-detail",
   "startup-ugc", "startup-match", "meeting-page", "agency-dashboard",
@@ -57,6 +67,18 @@ function ScreenRenderer() {
 
   switch (screen) {
     case "home": return <Home />;
+    case "step-s1": return <Step1BasicProfile />;
+    case "step-s2": return <Step2Capabilities />;
+    case "step-s3": return <Step3Pilot />;
+    case "step-s4": return <Step4Promotion />;
+    case "step-s5": return <Step5Challenge />;
+    case "step-a1": return <AgencyStep1Scout />;
+    case "step-a2": return <AgencyStep2Recommend />;
+    case "step-a3": return <AgencyStep3Brief />;
+    case "step-a4": return <AgencyStep4Meeting />;
+    case "step-b1": return <BrandStep1Challenge />;
+    case "step-b2": return <BrandStep2Vote />;
+    case "step-b3": return <BrandStep3Meeting />;
     case "startup-quest": return <StartupQuestPage />;
     case "agency-quest": return <AgencyQuestPage />;
     case "brand-quest": return <BrandQuestPage />;
