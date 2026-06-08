@@ -77,7 +77,6 @@ const roleHero: Record<Role, { title: string; desc: string; cta: string; ctaScre
 const communityItems: { icon: string; title: string; desc: string; xp: string; screen: Screen }[] = [
   { icon: "💬", title: "Canal y grupo de Telegram", desc: "Únete para recibir retos, conectar con perfiles validados y activar badges.", xp: "+150 XP", screen: "community-page" },
   { icon: "🏅", title: "Sistema de Badges", desc: "Roles visibles para startups, agencias, marcas, ecosistemas, mentores y jurado.", xp: "Ver", screen: "badges-page" },
-  { icon: "🗂️", title: "Base de datos por rol", desc: "Campos, permisos y estados para controlar la colaboración.", xp: "DB", screen: "role-database" },
 ];
 
 function ExpandCard({ icon, title, subtitle, children }: { icon: string; title: string; subtitle: string; children: React.ReactNode }) {
