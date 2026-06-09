@@ -3,6 +3,24 @@
 import { createServiceClient } from "@/lib/supabase/service";
 import { revalidatePath } from "next/cache";
 
+/* ─── Delete user ────────────────────────────────────────────────── */
+export async function deleteUser(formData: FormData) {
+  const supabase = createServiceClient();
+  const id = formData.get("id") as string;
+  if (!id) return;
+
+  // Delete in dependency order (FK constraints)
+  await supabase.from("votes").delete().eq("voter_id", id);
+  await supabase.from("recommendations").delete().eq("recommender_id", id);
+  await supabase.from("meetings").delete().eq("requester_id", id);
+  await supabase.from("invitations").delete().eq("inviter_id", id);
+  await supabase.from("org_members").delete().eq("user_id", id);
+  await supabase.from("startups").delete().eq("user_id", id);
+  await supabase.from("users").delete().eq("id", id);
+
+  revalidatePath("/admin/users");
+}
+
 /* ─── Update user ────────────────────────────────────────────────── */
 export async function updateUser(formData: FormData) {
   const supabase = createServiceClient();

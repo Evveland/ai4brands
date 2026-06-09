@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { updateUser, sendTelegramMessage } from "@/lib/supabase/user-actions";
+import { DeleteUserButton } from "@/components/admin/DeleteUserButton";
 
 const inputCls = "w-full rounded-[10px] border border-[rgba(255,255,255,.1)] bg-[rgba(255,255,255,.06)] px-3 py-2 text-[12px] text-white outline-none focus:border-[rgba(255,212,0,.4)] transition-colors font-sans";
 const labelCls = "block text-[10px] font-bold text-[#737D9D] uppercase tracking-wider mb-1";
@@ -88,6 +89,10 @@ export function UserRow({ user, detailUrl }: { user: any; detailUrl?: string }) 
               style={{ background: tab === "message" ? "rgba(42,171,238,.25)" : "rgba(42,171,238,.12)", color: "#2AABEE" }}>
               ✉️ Mensaje
             </button>
+            <DeleteUserButton
+              userId={user.id}
+              userName={user.first_name || (user.telegram_handle ? `@${user.telegram_handle}` : `#${user.telegram_id}`)}
+            />
           </div>
         </td>
       </tr>
