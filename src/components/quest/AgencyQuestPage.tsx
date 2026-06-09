@@ -1,4 +1,5 @@
 "use client";
+import { CountrySelect, useDefaultCountry } from "@/components/CountrySelect";
 
 import { useState } from "react";
 import { useNav } from "@/lib/store";
@@ -17,13 +18,14 @@ function CreateAgencyForm({ userId, onCreated }: { userId: string; onCreated: ()
   const [website, setWebsite] = useState("");
   const [specialties, setSpecialties] = useState("");
   const [description, setDescription] = useState("");
+  const [country, setCountry] = useState(useDefaultCountry());
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     const sArr = specialties.split(",").map(s => s.trim()).filter(Boolean);
-    await createOrg(userId, { type: "agency", name, contact_email: email, website, specialties: sArr, description });
+    await createOrg(userId, { type: "agency", name, contact_email: email, website, specialties: sArr, description, country });
     setLoading(false);
     onCreated();
   }
@@ -50,6 +52,8 @@ function CreateAgencyForm({ userId, onCreated }: { userId: string; onCreated: ()
       <div><label className={labelCls}>Descripción</label>
         <textarea value={description} onChange={e => setDescription(e.target.value)} rows={2}
           placeholder="Qué hace vuestra agencia…" className={`${inputCls} resize-y`} /></div>
+      <div><label className={labelCls}>País</label>
+        <CountrySelect value={country} onChange={setCountry} className={inputCls} /></div>
       <button type="submit" disabled={loading}
         className="rounded-[14px] py-3 font-black text-[14px] border-0 cursor-pointer mt-1"
         style={{ background: loading ? "rgba(255,212,0,.4)" : "#FFD400", color: "#10131F" }}>

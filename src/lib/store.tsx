@@ -7,6 +7,7 @@ interface AppState {
   screen: Screen;
   history: Screen[];
   role: Role | null;
+  country: string | null;
   xp: number;
   badges: string[];
 }
@@ -15,6 +16,7 @@ type Action =
   | { type: "GO"; screen: Screen }
   | { type: "BACK" }
   | { type: "SET_ROLE"; role: Role }
+  | { type: "SET_COUNTRY"; country: string }
   | { type: "ADD_XP"; amount: number }
   | { type: "ADD_BADGE"; badge: string };
 
@@ -34,6 +36,8 @@ function reducer(state: AppState, action: Action): AppState {
     }
     case "SET_ROLE":
       return { ...state, role: action.role };
+    case "SET_COUNTRY":
+      return { ...state, country: action.country };
     case "ADD_XP":
       return { ...state, xp: state.xp + action.amount };
     case "ADD_BADGE":
@@ -48,6 +52,7 @@ const initialState: AppState = {
   screen: "home",
   history: ["home"],
   role: null,
+  country: null,
   xp: 0,
   badges: [],
 };

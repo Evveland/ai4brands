@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useNav } from "@/lib/store";
+import { useNav, useAppState } from "@/lib/store";
 import { Card } from "@/components/ui/Card";
 import { fetchEcosystemRankings } from "@/lib/db";
+import { COUNTRIES, countryLabel } from "@/lib/countries";
 
 type RankUser = {
   id: string;
@@ -11,13 +12,16 @@ type RankUser = {
   first_name: string | null;
   xp: number;
   role: string;
+  country: string | null;
 };
 
 export function Rankings() {
   const { go } = useNav();
+  const { country: userCountry } = useAppState();
   const [rankings, setRankings] = useState<RankUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<"all" | "startup" | "agency">("all");
+  const [countryFilter, setCountryFilter] = useState<string>("all");
 
   useEffect(() => {
     fetchEcosystemRankings().then((data) => {
@@ -26,9 +30,9 @@ export function Rankings() {
     });
   }, []);
 
-  const filtered = tab === "all"
-    ? rankings
-    : rankings.filter((r) => r.role === tab);
+  const filtered = rankings
+    .filter(r => tab === "all" || r.role === tab)
+    .filter(r => countryFilter === "all" || r.country === countryFilter);
 
   return (
     <div>
@@ -39,7 +43,8 @@ export function Rankings() {
         </button>
       </div>
 
-      <div className="flex gap-2 overflow-x-auto pb-0.5 mb-[14px]">
+      {/* Role tabs */}
+      <div className="flex gap-2 overflow-x-auto pb-0.5 mb-2">
         {[
           { key: "all", label: "Todos" },
           { key: "startup", label: "Startups" },
@@ -49,6 +54,22 @@ export function Rankings() {
             className="border border-[rgba(255,255,255,.09)] rounded-full px-3 py-[9px] whitespace-nowrap text-[12px] font-bold cursor-pointer"
             style={{ background: tab === t.key ? "#FFD400" : "rgba(255,255,255,.06)", color: tab === t.key ? "#10131F" : "var(--muted)" }}>
             {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Country filter */}
+      <div className="flex gap-2 overflow-x-auto pb-0.5 mb-[14px]">
+        <button onClick={() => setCountryFilter("all")}
+          className="border border-[rgba(255,255,255,.09)] rounded-full px-3 py-[7px] whitespace-nowrap text-[11px] font-bold cursor-pointer"
+          style={{ background: countryFilter === "all" ? "rgba(68,215,255,.2)" : "rgba(255,255,255,.05)", color: countryFilter === "all" ? "#44D7FF" : "var(--muted)" }}>
+          🌍 Global
+        </button>
+        {COUNTRIES.map(c => (
+          <button key={c.code} onClick={() => setCountryFilter(c.code)}
+            className="border border-[rgba(255,255,255,.09)] rounded-full px-3 py-[7px] whitespace-nowrap text-[11px] font-bold cursor-pointer"
+            style={{ background: countryFilter === c.code ? "rgba(68,215,255,.2)" : "rgba(255,255,255,.05)", color: countryFilter === c.code ? "#44D7FF" : "var(--muted)" }}>
+            {c.flag} {c.name}
           </button>
         ))}
       </div>
@@ -76,7 +97,10 @@ export function Rankings() {
                 <h4 className="m-0 text-[13px] font-semibold">
                   {r.telegram_handle ? `@${r.telegram_handle}` : r.first_name ?? `Usuario #${i + 1}`}
                 </h4>
-                <p className="m-0 mt-[3px] text-[11px] text-[var(--muted)] capitalize">{r.role ?? "—"}</p>
+                <p className="m-0 mt-[3px] text-[11px] text-[var(--muted)] capitalize">
+                  {r.role ?? "—"}
+                  {r.country && <span className="ml-1">{COUNTRIES.find(c => c.code === r.country)?.flag}</span>}
+                </p>
               </div>
               <div className="text-[12px] font-black text-[#4DFF9D] whitespace-nowrap">
                 {(r.xp ?? 0).toLocaleString()} XP

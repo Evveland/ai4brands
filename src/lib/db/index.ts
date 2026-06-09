@@ -96,6 +96,11 @@ export async function updateUserRole(userId: string, role: string) {
   await supabase.from("users").update({ role }).eq("id", userId);
 }
 
+export async function updateUserCountry(userId: string, country: string) {
+  const supabase = createClient();
+  await supabase.from("users").update({ country }).eq("id", userId);
+}
+
 export async function addUserXP(userId: string, amount: number) {
   const supabase = createClient();
   const { data } = await supabase

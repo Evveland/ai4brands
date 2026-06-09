@@ -10,6 +10,7 @@ export interface DBUser {
   telegram_handle: string | null;
   first_name: string | null;
   role: string | null;
+  country: string | null;
   xp: number;
   badges: string[];
 }
@@ -32,6 +33,9 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       // DB is source of truth — always restore full state from DB on load
       if (user.role) {
         dispatch({ type: "SET_ROLE", role: user.role as any });
+      }
+      if (user.country) {
+        dispatch({ type: "SET_COUNTRY", country: user.country });
       }
       // Reset XP to DB value (not additive — avoids stacking across sessions)
       if ((user.xp ?? 0) > 0) {

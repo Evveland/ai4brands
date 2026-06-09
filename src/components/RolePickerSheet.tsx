@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useDispatch } from "@/lib/store";
+import { useDispatch, useAppState } from "@/lib/store";
 import { useDBUser } from "@/components/UserProvider";
-import { updateUserRole, addUserBadge } from "@/lib/db";
+import { updateUserRole, addUserBadge, updateUserCountry } from "@/lib/db";
 import { getUserOrg } from "@/lib/db/orgs";
+import { COUNTRIES } from "@/lib/countries";
 import type { Role } from "@/types";
 
 const roles: { id: Role; icon: string; tag: string; desc: string }[] = [
@@ -28,6 +29,8 @@ interface Props {
 export function RolePickerSheet({ current, onSelect, onClose }: Props) {
   const dispatch = useDispatch();
   const dbUser = useDBUser();
+  const { country } = useAppState();
+  const [selectedCountry, setSelectedCountry] = useState(country ?? "ES");
   const [hasOrg, setHasOrg] = useState(false);
 
   // Check if user already has a registered org (locks role switching)
@@ -40,9 +43,11 @@ export function RolePickerSheet({ current, onSelect, onClose }: Props) {
     // If registered, only allow clicking the current role (to navigate to quest)
     if (hasOrg && role !== current) return;
     dispatch({ type: "SET_ROLE", role });
+    dispatch({ type: "SET_COUNTRY", country: selectedCountry });
     dispatch({ type: "ADD_BADGE", badge: "Candidato" });
     if (dbUser?.id) {
       await updateUserRole(dbUser.id, role);
+      await updateUserCountry(dbUser.id, selectedCountry);
       await addUserBadge(dbUser.id, "Candidato");
     }
     onSelect(role);
@@ -120,7 +125,24 @@ export function RolePickerSheet({ current, onSelect, onClose }: Props) {
         </div>{/* end scroll area */}
 
         {/* Fixed footer */}
-        <div className="px-5 pt-2 pb-6 flex-none border-t" style={{ borderColor: "rgba(255,255,255,.07)" }}>
+        <div className="px-5 pt-3 pb-6 flex-none border-t" style={{ borderColor: "rgba(255,255,255,.07)" }}>
+          {/* Country selector */}
+          {!hasOrg && (
+            <div className="mb-3">
+              <label className="block text-[10px] font-black text-[#737D9D] uppercase tracking-wider mb-1.5">
+                País
+              </label>
+              <select
+                value={selectedCountry}
+                onChange={e => setSelectedCountry(e.target.value)}
+                className="w-full rounded-[12px] border border-[rgba(255,255,255,.1)] bg-[rgba(255,255,255,.06)] px-3 py-2.5 text-[13px] text-white outline-none"
+              >
+                {COUNTRIES.map(c => (
+                  <option key={c.code} value={c.code}>{c.flag} {c.name}</option>
+                ))}
+              </select>
+            </div>
+          )}
           <button
             onClick={onClose}
             className="w-full rounded-[14px] py-3 text-[13px] font-black cursor-pointer border-0"

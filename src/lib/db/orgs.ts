@@ -32,6 +32,7 @@ export interface Organization {
   xp: number;
   badges: string[];
   completed_steps: string[];
+  country: string | null;
   created_at: string;
   updated_at: string;
 }

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useNav } from "@/lib/store";
 import { BackBar } from "@/components/BackBar";
+import { CountrySelect, useDefaultCountry } from "@/components/CountrySelect";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { createOrg, updateOrg } from "@/lib/db/orgs";
@@ -20,12 +21,13 @@ function CreateStartupForm({ userId, onCreated }: { userId: string; onCreated: (
   const [idealClient, setIdealClient] = useState("");
   const [email, setEmail] = useState("");
   const [website, setWebsite] = useState("");
+  const [country, setCountry] = useState(useDefaultCountry());
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    await createOrg(userId, { type: "startup", name, vertical, one_liner: oneLiner, ideal_client: idealClient, contact_email: email, website });
+    await createOrg(userId, { type: "startup", name, vertical, one_liner: oneLiner, ideal_client: idealClient, contact_email: email, website, country });
     setLoading(false);
     onCreated();
   }
@@ -49,6 +51,8 @@ function CreateStartupForm({ userId, onCreated }: { userId: string; onCreated: (
         <input value={idealClient} onChange={e => setIdealClient(e.target.value)} placeholder="Ej: retail, banca, gran consumo" className={inputCls} /></div>
       <div><label className={labelCls}>Web</label>
         <input type="url" value={website} onChange={e => setWebsite(e.target.value)} placeholder="https://startup.com" className={inputCls} /></div>
+      <div><label className={labelCls}>País</label>
+        <CountrySelect value={country} onChange={setCountry} className={inputCls} /></div>
       <button type="submit" disabled={loading}
         className="rounded-[14px] py-3 font-black text-[14px] border-0 cursor-pointer mt-1"
         style={{ background: loading ? "rgba(255,212,0,.4)" : "#FFD400", color: "#10131F" }}>

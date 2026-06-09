@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import { UserRow } from "@/components/admin/UserRow";
 import { sendTelegramMessage } from "@/lib/supabase/user-actions";
+import { COUNTRIES, countryLabel } from "@/lib/countries";
 
 const ROLES = ["", "startup", "agency", "brand", "media", "university", "investor", "hub", "institutional", "curator"];
 
@@ -16,6 +17,7 @@ const roleColors: Record<string, string> = {
 export function UsersManager({ users }: { users: any[] }) {
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
+  const [countryFilter, setCountryFilter] = useState("");
   const [bulkMessage, setBulkMessage] = useState("");
   const [bulkSending, setBulkSending] = useState(false);
   const [bulkResult, setBulkResult] = useState<{ sent: number; failed: number } | null>(null);
@@ -25,9 +27,10 @@ export function UsersManager({ users }: { users: any[] }) {
       const matchSearch = !search || [u.first_name, u.telegram_handle, String(u.telegram_id)]
         .some(v => v?.toLowerCase().includes(search.toLowerCase()));
       const matchRole = !roleFilter || u.role === roleFilter;
-      return matchSearch && matchRole;
+      const matchCountry = !countryFilter || u.country === countryFilter;
+      return matchSearch && matchRole && matchCountry;
     });
-  }, [users, search, roleFilter]);
+  }, [users, search, roleFilter, countryFilter]);
 
   // Role breakdown
   const byRole = users.reduce((acc: Record<string, number>, u) => {
@@ -101,6 +104,14 @@ export function UsersManager({ users }: { users: any[] }) {
           className="rounded-[12px] border border-[rgba(255,255,255,.1)] bg-[rgba(255,255,255,.06)] px-3 py-2 text-[12px] text-white outline-none"
         >
           {ROLES.map(r => <option key={r} value={r}>{r ? r : "Todos los roles"}</option>)}
+        </select>
+        <select
+          value={countryFilter}
+          onChange={e => setCountryFilter(e.target.value)}
+          className="rounded-[12px] border border-[rgba(255,255,255,.1)] bg-[rgba(255,255,255,.06)] px-3 py-2 text-[12px] text-white outline-none"
+        >
+          <option value="">🌍 Todos los países</option>
+          {COUNTRIES.map(c => <option key={c.code} value={c.code}>{c.flag} {c.name}</option>)}
         </select>
         <button onClick={exportCSV}
           className="rounded-[12px] px-4 py-2 text-[12px] font-black cursor-pointer border-0 whitespace-nowrap"

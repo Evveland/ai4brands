@@ -1,4 +1,5 @@
 "use client";
+import { CountrySelect, useDefaultCountry } from "@/components/CountrySelect";
 
 import { useState } from "react";
 import { useNav } from "@/lib/store";
@@ -17,12 +18,13 @@ function CreateInstitutionalForm({ userId, onCreated }: { userId: string; onCrea
   const [email, setEmail] = useState("");
   const [website, setWebsite] = useState("");
   const [description, setDescription] = useState("");
+  const [country, setCountry] = useState(useDefaultCountry());
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    await createOrg(userId, { type: "institutional", name, ecosystem_tag: ecosystemTag, contact_email: email, website, description });
+    await createOrg(userId, { type: "institutional", name, ecosystem_tag: ecosystemTag, contact_email: email, website, description, country });
     setLoading(false);
     onCreated();
   }
@@ -44,6 +46,8 @@ function CreateInstitutionalForm({ userId, onCreated }: { userId: string; onCrea
       <div><label className={labelCls}>Descripción del ecosistema</label>
         <textarea value={description} onChange={e => setDescription(e.target.value)} rows={2}
           placeholder="Número de startups, sectores, comunidad…" className={`${inputCls} resize-y`} /></div>
+      <div><label className={labelCls}>País</label>
+        <CountrySelect value={country} onChange={setCountry} className={inputCls} /></div>
       <button type="submit" disabled={loading}
         className="rounded-[14px] py-3 font-black text-[14px] border-0 cursor-pointer mt-1"
         style={{ background: loading ? "rgba(255,212,0,.4)" : "#FFD400", color: "#10131F" }}>
