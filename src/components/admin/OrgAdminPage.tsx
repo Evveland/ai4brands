@@ -1,8 +1,19 @@
 import { createServiceClient } from "@/lib/supabase/service";
+import { revalidatePath } from "next/cache";
 import { SectionHeader, AdminCard, Table, Tr, Td } from "@/components/admin/AdminCard";
 import { approveOrgAction } from "@/lib/supabase/approval-actions";
 import { RejectOrgButton } from "@/components/admin/RejectOrgButton";
+import { DeleteOrgButton } from "@/components/admin/DeleteOrgButton";
 import type { OrgType } from "@/lib/db/orgs";
+
+async function deleteOrgAction(formData: FormData) {
+  "use server";
+  const supabase = createServiceClient();
+  const orgId = formData.get("org_id") as string;
+  // org_members cascade-deletes automatically (FK on delete cascade)
+  await supabase.from("organizations").delete().eq("id", orgId);
+  revalidatePath("/admin");
+}
 
 const statusColors: Record<string, string> = {
   approved: "#4DFF9D",
@@ -167,6 +178,11 @@ export async function OrgAdminPage({ type, title, icon, emptyMessage, fieldLabel
                       Motivo: {o.rejection_reason}
                     </div>
                   )}
+
+                  {/* Delete — always visible */}
+                  <div className="flex justify-end pt-3 mt-2 border-t border-[rgba(255,255,255,.05)]">
+                    <DeleteOrgButton orgId={o.id} orgName={o.name} deleteAction={deleteOrgAction} />
+                  </div>
                 </div>
               </details>
             );
