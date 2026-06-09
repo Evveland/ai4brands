@@ -135,8 +135,10 @@ export function App() {
     >
       {!isInner && <TopBar />}
       <ScreenRenderer />
-      {/* Powered by footer — sits above BottomNav */}
-      <div className="text-center pb-[10px] mt-4">
+      {/* Footer — sits above BottomNav */}
+      <div className="flex items-center justify-center gap-3 pb-[10px] mt-4">
+        <span className="text-[10px]" style={{ color: "#737D9D" }}>© 2026 Yellow_</span>
+        <span className="text-[10px]" style={{ color: "#4a5068" }}>·</span>
         <a
           href="https://evveland.com"
           target="_blank"
