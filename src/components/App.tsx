@@ -6,6 +6,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { TelegramInit } from "@/components/TelegramInit";
 import { Home } from "@/components/screens/Home";
 import { Challenges } from "@/components/screens/Challenges";
+import { Store } from "@/components/screens/Store";
 import { StartupQuestPage } from "@/components/quest/StartupQuestPage";
 import { Step1BasicProfile } from "@/components/steps/startup/Step1BasicProfile";
 import { Step2Capabilities } from "@/components/steps/startup/Step2Capabilities";
@@ -89,6 +90,7 @@ function ScreenRenderer() {
     case "quests":
     case "role-quest": return <Quests />;
     case "challenges": return <Challenges />;
+    case "store": return <Store />;
     case "scout": return <Scout />;
     case "rankings": return <Rankings />;
     case "rewards": return <Rewards />;

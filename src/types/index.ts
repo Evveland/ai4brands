@@ -88,6 +88,7 @@ export type Screen =
   | "home"
   | "quests"
   | "challenges"
+  | "store"
   | "scout"
   | "rankings"
   | "rewards"

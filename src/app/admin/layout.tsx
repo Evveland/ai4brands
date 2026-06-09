@@ -20,6 +20,7 @@ const navLinks = [
   { href: "/admin/universities",label: "Universidades",icon: "🎓" },
   { href: "/admin/investors",  label: "Inversores",    icon: "💰" },
   { href: "/admin/hubs",       label: "Hubs & Labs",   icon: "🏗️" },
+  { href: "/admin/products",   label: "Tienda",        icon: "🛍️" },
   { href: "/admin/challenges", label: "Challenges",    icon: "⚡" },
   { href: "/admin/votes",      label: "Votos & Awards",icon: "🏆" },
 ];

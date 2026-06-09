@@ -35,7 +35,7 @@ export function BottomNav() {
   const navItems: { icon: string; label: string; screen: Screen; key: string }[] = [
     { icon: "🏠", label: "Home",    screen: "home",       key: "home" },
     { icon: "🚀", label: "Quest",   screen: questScreen,  key: "quest" },
-    { icon: "🎯", label: "Retos",   screen: "challenges", key: "challenges" },
+    { icon: "🛍️", label: "Tienda",  screen: "store",      key: "store" },
     { icon: "🔎", label: "Scout",   screen: "scout",      key: "scout" },
     { icon: "🏆", label: "Trofeos", screen: "rewards",    key: "rewards" },
   ];
