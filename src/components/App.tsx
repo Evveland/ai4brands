@@ -137,7 +137,10 @@ export function App() {
       <ScreenRenderer />
       {/* Footer — sits above BottomNav */}
       <div className="flex items-center justify-center gap-3 pb-[10px] mt-4">
-        <span className="text-[10px]" style={{ color: "#737D9D" }}>© 2026 Yellow_</span>
+        <a href="https://yellowagencia.es" target="_blank" rel="noopener noreferrer"
+          className="text-[10px] no-underline" style={{ color: "#737D9D" }}>
+          © 2026 <span className="font-black" style={{ color: "#A9B1CB" }}>Yellow_</span>
+        </a>
         <span className="text-[10px]" style={{ color: "#4a5068" }}>·</span>
         <a
           href="https://evveland.com"
