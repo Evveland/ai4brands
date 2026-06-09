@@ -77,6 +77,7 @@ const roleHero: Record<Role, { title: string; desc: string; cta: string; ctaScre
 
 const communityItems: { icon: string; title: string; desc: string; xp: string; screen: Screen }[] = [
   { icon: "💬", title: "Canal y grupo de Telegram", desc: "Únete para recibir retos, conectar con perfiles validados y activar badges.", xp: "+150 XP", screen: "community-page" },
+  { icon: "📱", title: "Redes Sociales", desc: "Publica en LinkedIn, Instagram y YouTube sobre AI4Brands y gana XP.", xp: "+750 XP", screen: "social-page" },
   { icon: "🏅", title: "Sistema de Badges", desc: "Roles visibles para startups, agencias, marcas, ecosistemas, mentores y jurado.", xp: "Ver", screen: "badges-page" },
 ];
 

@@ -23,6 +23,7 @@ const navLinks = [
   { href: "/admin/products",   label: "Tienda",        icon: "🛍️" },
   { href: "/admin/challenges", label: "Challenges",    icon: "⚡" },
   { href: "/admin/votes",      label: "Votos & Awards",icon: "🏆" },
+  { href: "/admin/social",     label: "Redes Sociales", icon: "📱" },
 ];
 
 export default function AdminLayout({

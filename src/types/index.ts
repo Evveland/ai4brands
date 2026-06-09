@@ -97,6 +97,7 @@ export type Screen =
   | "challenge-page"
   | "badges-page"
   | "community-page"
+  | "social-page"
   | "event-page"
   | "ecosystem-challenge"
   | "founder-challenge"

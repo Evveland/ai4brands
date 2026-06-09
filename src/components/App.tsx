@@ -7,6 +7,7 @@ import { TelegramInit } from "@/components/TelegramInit";
 import { Home } from "@/components/screens/Home";
 import { Challenges } from "@/components/screens/Challenges";
 import { Store } from "@/components/screens/Store";
+import { SocialPage } from "@/components/screens/SocialPage";
 import { StartupQuestPage } from "@/components/quest/StartupQuestPage";
 import { Step1BasicProfile } from "@/components/steps/startup/Step1BasicProfile";
 import { Step2Capabilities } from "@/components/steps/startup/Step2Capabilities";
@@ -59,7 +60,7 @@ const INNER_SCREENS = new Set([
   "ecosystem-challenge", "sponsor-page", "access-flow", "award-content-ai",
   "award-cx-ai", "award-ecosystem", "awards-vote", "awards-recommend",
   "profile-page", "promotion-page", "challenge-page", "badges-page",
-  "community-page", "agency-quest-page", "brand-quest-page",
+  "community-page", "social-page", "agency-quest-page", "brand-quest-page",
   "institutional-quest-page", "role-quest",
 ]);
 
@@ -115,6 +116,7 @@ function ScreenRenderer() {
     case "pilot-page": return <ProfilePage />;
     case "badges-page": return <BadgesPage />;
     case "community-page": return <CommunityPage />;
+    case "social-page": return <SocialPage />;
     case "agency-dashboard":
     case "ecosystem-dashboard": return <AgencyDashboard />;
     case "awards-vote": return <AwardsVote />;
