@@ -11,9 +11,28 @@ interface TgUser {
   photo_url?: string;
 }
 
-function getTelegramUser(): TgUser | null {
+/** Wait up to `ms` milliseconds for Telegram WebApp to populate initDataUnsafe */
+async function waitForTelegramSDK(ms = 1500): Promise<TgUser | null> {
   if (typeof window === "undefined") return null;
-  return (window as any).Telegram?.WebApp?.initDataUnsafe?.user ?? null;
+
+  // Already ready
+  const tg = (window as any).Telegram?.WebApp;
+  if (tg?.initDataUnsafe?.user) return tg.initDataUnsafe.user as TgUser;
+
+  // Not in Telegram at all (e.g. regular browser)
+  if (!tg) return null;
+
+  // SDK exists but initDataUnsafe not yet populated — poll briefly
+  return new Promise((resolve) => {
+    const start = Date.now();
+    const interval = setInterval(() => {
+      const user = (window as any).Telegram?.WebApp?.initDataUnsafe?.user;
+      if (user || Date.now() - start >= ms) {
+        clearInterval(interval);
+        resolve(user ?? null);
+      }
+    }, 50);
+  });
 }
 
 function getOrCreateLocalId(): number {
@@ -29,16 +48,16 @@ function getOrCreateLocalId(): number {
 export async function getOrCreateUser() {
   const supabase = createClient();
 
-  // Prefer real Telegram identity when running inside Telegram
-  const tgUser = getTelegramUser();
+  // Wait for real Telegram identity (handles race condition with SDK init)
+  const tgUser = await waitForTelegramSDK();
   const telegramId = tgUser?.id ?? getOrCreateLocalId();
   const firstName = tgUser?.first_name ?? null;
   const handle = tgUser?.username ?? null;
 
-  // Expand the Telegram WebApp to full height
-  if (typeof window !== "undefined") {
-    (window as any).Telegram?.WebApp?.expand();
-    (window as any).Telegram?.WebApp?.ready();
+  // If we got a real Telegram user, persist their localStorage mapping
+  // so future calls without Telegram (dev/web) still find the same record
+  if (tgUser?.id && typeof window !== "undefined") {
+    localStorage.setItem("ai4brands_uid", String(tgUser.id));
   }
 
   // Try existing
@@ -59,7 +78,7 @@ export async function getOrCreateUser() {
         .update({ first_name: firstName, telegram_handle: handle })
         .eq("id", existing.id);
     }
-    return existing;
+    return { ...existing, first_name: firstName ?? existing.first_name, telegram_handle: handle ?? existing.telegram_handle };
   }
 
   // Create new

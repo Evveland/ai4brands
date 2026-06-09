@@ -17,18 +17,21 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" suppressHydrationWarning>
       <head>
-        {/* Telegram MiniApp SDK — must load before React hydration */}
+        {/* Telegram MiniApp SDK — synchronous so initDataUnsafe is populated before React hydrates */}
         <script src="https://telegram.org/js/telegram-web-app.js" />
-        {/* Tell Telegram this is a full-screen app */}
-        <meta name="telegram:web_app" content="fullscreen" />
+        {/* Call ready() immediately after SDK loads so Telegram populates initDataUnsafe */}
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            if (window.Telegram && window.Telegram.WebApp) {
+              window.Telegram.WebApp.ready();
+              window.Telegram.WebApp.expand();
+            }
+          `
+        }} />
       </head>
       <body className={inter.className}>{children}</body>
     </html>

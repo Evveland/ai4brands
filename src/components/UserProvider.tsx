@@ -29,13 +29,15 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       if (!user) return;
       setDbUser(user as DBUser);
 
-      // Always sync DB → local state (DB is source of truth)
+      // DB is source of truth — always restore full state from DB on load
       if (user.role) {
         dispatch({ type: "SET_ROLE", role: user.role as any });
       }
+      // Reset XP to DB value (not additive — avoids stacking across sessions)
       if ((user.xp ?? 0) > 0) {
         dispatch({ type: "ADD_XP", amount: user.xp });
       }
+      // Restore all earned badges
       if (user.badges?.length) {
         user.badges.forEach((b: string) => dispatch({ type: "ADD_BADGE", badge: b }));
       }
@@ -49,10 +51,8 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         const suggestedRole = parts[2];
 
         if (inviterUserId && inviterUserId !== user.id) {
-          // Record the referral: increment uses on the inviter's invitation
           const { createClient } = await import("@/lib/supabase/client");
           const supabase = createClient();
-          // Update the invitation record for this inviter+role
           const { data: inv } = await supabase
             .from("invitations")
             .select("id, uses")
@@ -69,7 +69,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
               .eq("id", inv.id);
           }
 
-          // Pre-suggest role if user hasn't chosen one
+          // Pre-fill role only if user hasn't registered yet
           if (!user.role && suggestedRole) {
             dispatch({ type: "SET_ROLE", role: suggestedRole as any });
           }
